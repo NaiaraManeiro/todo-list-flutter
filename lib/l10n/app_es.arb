@@ -1,0 +1,12 @@
+{ 
+    "singUp": "Registrarse",
+    "email": "Correo electrónico",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "confirmPass": "Confirmar contraseña",
+
+    "badEmail": "El campo Correo electrónico tiene un formato incorrecto.",
+    "badUsername": "¡El nombre de usuario tiene que tener entre 5 y 20 caracteres y un número!",
+    "badPassword": "¡La contraseña tiene que tener entre 8 y 20 caracteres, una mayúscula y una minúscula, un número y una caracter especial!",
+    "passwordsNotMatch": "Las contraseñas no coinciden."
+}

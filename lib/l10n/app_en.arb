@@ -1,0 +1,12 @@
+{ 
+    "singUp": "Sing Up",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "confirmPass": "Confirm password",
+
+    "badEmail": "Field Email has an incorrect format.",
+    "badUsername": "The username has to have between 5 and 20 characters and a number!",
+    "badPassword": "The password has to have between 8 and 20 characters, one uppercase and one lower case, a number and a special character!",
+    "passwordsNotMatch": "The passwords don't match."
+}
