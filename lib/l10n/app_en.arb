@@ -8,5 +8,17 @@
     "badEmail": "Field Email has an incorrect format.",
     "badUsername": "The username has to have between 5 and 20 characters and a number!",
     "badPassword": "The password has to have between 8 and 20 characters, one uppercase and one lower case, a number and a special character!",
-    "passwordsNotMatch": "The passwords don't match."
+    "passwordsNotMatch": "The passwords don't match.",
+    "incorrectInputs": "Please check your input content.",
+    "userExists": "The email already exists, please try with another one.",
+
+    "categoryJob": "Job",
+    "categorySports": "Sport",
+    "categoryReading": "Reading",
+    "categoryTravel": "Travel",
+    "categoryGeneral": "General",
+
+    "dialogAlertTitle": "Alert!",
+    "dialogRegisterFailText": "There was a problem in the register, try again.",
+    "dialogRegisterOkText": "The registration was successful!"
 }

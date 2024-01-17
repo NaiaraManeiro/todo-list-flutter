@@ -8,5 +8,17 @@
     "badEmail": "El campo Correo electrónico tiene un formato incorrecto.",
     "badUsername": "¡El nombre de usuario tiene que tener entre 5 y 20 caracteres y un número!",
     "badPassword": "¡La contraseña tiene que tener entre 8 y 20 caracteres, una mayúscula y una minúscula, un número y una caracter especial!",
-    "passwordsNotMatch": "Las contraseñas no coinciden."
+    "passwordsNotMatch": "Las contraseñas no coinciden.",
+    "incorrectInputs": "Por favor, compruebe los campos.",
+    "userExists": "El email ya existe, por favor pruebe con otro.",
+
+    "categoryJob": "Trabajo",
+    "categorySports": "Deporte",
+    "categoryReading": "Lectura",
+    "categoryTravel": "Viajes",
+    "categoryGeneral": "General",
+
+    "dialogAlertTitle": "¡Alerta!",
+    "dialogRegisterFailText": "Hubo in problema con el registro, intentelo de nuevo.",
+    "dialogRegisterOkText": "¡El registro fue exitoso!"
 }

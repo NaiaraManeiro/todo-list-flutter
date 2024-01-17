@@ -11,6 +11,11 @@ class RegisterProvider extends ChangeNotifier {
   String password = '';
   String confirmPassword = '';
 
+  bool isUserNameOk = false;
+  bool isEmailOk = false;
+  bool isPasswordOk = false;
+  bool isRePasswordOk = false;
+
   final emailKey = GlobalKey<FormState>();
   final userNameKey = GlobalKey<FormState>();
   final passwordKey = GlobalKey<FormState>();

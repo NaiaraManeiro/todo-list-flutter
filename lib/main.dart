@@ -52,7 +52,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         RegisterPage.routeName: (_) => const RegisterPage(),
         LoginPage.routeName: (_) => const LoginPage(),
-        SplashPage.routeName: (_) => const SplashPage()
+        SplashPage.routeName: (_) => const SplashPage(),
+        MainPage.routeName: (_) => const MainPage(),
       },
     );
   }

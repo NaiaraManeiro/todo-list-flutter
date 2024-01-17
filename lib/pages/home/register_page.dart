@@ -24,7 +24,7 @@ class __RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         title: Text(words.singUp),
         actions: <Widget>[
-          IconButton(icon: const Icon(Icons.check), onPressed: registerForm.logic.onSubmit)
+          IconButton(icon: const Icon(Icons.check), onPressed: () => registerForm.logic.onSubmit(words))
         ],
       ),
       body: Container(
