@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/providers.dart';
 import '../../ui/uis.dart';
+import '../pages.dart';
 
 class RegisterPage extends StatefulWidget {
   static String routeName = "register";
@@ -23,6 +26,12 @@ class __RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(words.singUp),
+        leading: IconButton(
+                icon: Icon(Platform.isAndroid
+                    ? Icons.arrow_back
+                    : Icons.arrow_back_ios, color: Colors.black,),
+                onPressed: () => Navigator.pushReplacementNamed(context, LoginPage.routeName),
+              ),
         actions: <Widget>[
           IconButton(icon: const Icon(Icons.check), onPressed: () => registerForm.logic.onSubmit(words))
         ],

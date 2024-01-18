@@ -1,9 +1,11 @@
 { 
     "singUp": "Registrarse",
+    "singIn": "Iniciar sesión",
     "email": "Correo electrónico",
     "username": "Nombre de usuario",
     "password": "Contraseña",
     "confirmPass": "Confirmar contraseña",
+    "noAccount": "¿No tienes cuenta? Registrate aquí!",
 
     "badEmail": "El campo Correo electrónico tiene un formato incorrecto.",
     "badUsername": "¡El nombre de usuario tiene que tener entre 5 y 20 caracteres y un número!",
@@ -11,6 +13,9 @@
     "passwordsNotMatch": "Las contraseñas no coinciden.",
     "incorrectInputs": "Por favor, compruebe los campos.",
     "userExists": "El email ya existe, por favor pruebe con otro.",
+    "userNoExists": "El email no existe, do you want to register it?",
+    "incorrectPass": "La contraseña es incorrecta, pruebe de nuevo.",
+    "loginOk": "¡Inicio de sesión exitoso!",
 
     "categoryJob": "Trabajo",
     "categorySports": "Deporte",

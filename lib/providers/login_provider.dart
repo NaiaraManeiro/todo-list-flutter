@@ -2,32 +2,24 @@ import 'package:flutter/material.dart';
 
 import '../logic/logics.dart';
 
-class RegisterProvider extends ChangeNotifier {
-  late RegisterLogic logic;
+class LoginProvider extends ChangeNotifier {
+  late LoginLogic logic;
   late BuildContext context;
 
   String email = '';
-  String username = '';
   String password = '';
-  String confirmPassword = '';
 
-  bool isUserNameOk = false;
   bool isEmailOk = false;
   bool isPasswordOk = false;
-  bool isRePasswordOk = false;
 
   final emailKey = GlobalKey<FormState>();
-  final userNameKey = GlobalKey<FormState>();
   final passwordKey = GlobalKey<FormState>();
-  final rePasswordKey = GlobalKey<FormState>();
 
   final emailFocusNode = FocusNode();
-  final userNameFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
-  final rePasswordFocusNode = FocusNode();
 
-  RegisterProvider(){
-    logic = RegisterLogic(this);
+  LoginProvider(){
+    logic = LoginLogic(this);
   }
 
   void setContext(BuildContext context){
@@ -42,9 +34,7 @@ class RegisterProvider extends ChangeNotifier {
 
   void disposeNode(){
     emailFocusNode.dispose();
-    userNameFocusNode.dispose();
     passwordFocusNode.dispose();
-    rePasswordFocusNode.dispose();
   }
 
   void refresh(){

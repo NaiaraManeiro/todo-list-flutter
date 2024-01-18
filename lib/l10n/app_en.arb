@@ -1,9 +1,11 @@
 { 
     "singUp": "Sing Up",
+    "singIn": "Sing In",
     "email": "Email",
     "username": "Username",
     "password": "Password",
     "confirmPass": "Confirm password",
+    "noAccount": "Do you not have an account? Register here!",
 
     "badEmail": "Field Email has an incorrect format.",
     "badUsername": "The username has to have between 5 and 20 characters and a number!",
@@ -11,6 +13,9 @@
     "passwordsNotMatch": "The passwords don't match.",
     "incorrectInputs": "Please check your input content.",
     "userExists": "The email already exists, please try with another one.",
+    "userNoExists": "The email doesn't exists, do you want to register it?",
+    "incorrectPass": "The password is incorrect, try again.",
+    "loginOk": "Successful login!",
 
     "categoryJob": "Job",
     "categorySports": "Sport",

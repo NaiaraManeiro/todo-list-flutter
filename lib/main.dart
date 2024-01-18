@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/pages.dart';
-import 'providers/register_provider.dart';
+import 'providers/providers.dart';
 
 void main() {
   runApp(const AppState());
@@ -18,6 +18,7 @@ class AppState extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => RegisterProvider(), lazy: false,),
+          ChangeNotifierProvider(create: (_) => LoginProvider(), lazy: false,),
         ],
         child: const MyApp(),
       );
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         Locale('es', 'ES'),
       ],
       debugShowCheckedModeBanner: false,
-      initialRoute: RegisterPage.routeName,
+      initialRoute: LoginPage.routeName,
       routes: {
         RegisterPage.routeName: (_) => const RegisterPage(),
         LoginPage.routeName: (_) => const LoginPage(),

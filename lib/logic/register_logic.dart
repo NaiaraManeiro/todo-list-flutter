@@ -94,7 +94,7 @@ class RegisterLogic{
       ShowDialogs.showRegisterDialog(words.dialogAlertTitle, words.dialogRegisterFailText, _provider.context);
     } else {
       Get.snackbar("Successful registration", words.dialogRegisterOkText, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
-      Navigator.pushReplacementNamed(_provider.context, MainPage.routeName);
+      Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);
     }
 
     }
