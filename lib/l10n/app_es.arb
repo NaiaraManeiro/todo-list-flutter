@@ -16,6 +16,9 @@
     "userNoExists": "El email no existe, do you want to register it?",
     "incorrectPass": "La contraseña es incorrecta, pruebe de nuevo.",
     "loginOk": "¡Inicio de sesión exitoso!",
+    "notUserBiometry": "Inicie sesión antes de usar la biometría.",
+
+    "mainTitle": "Todo List",
 
     "categoryJob": "Trabajo",
     "categorySports": "Deporte",

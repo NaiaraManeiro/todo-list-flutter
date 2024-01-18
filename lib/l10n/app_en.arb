@@ -16,6 +16,9 @@
     "userNoExists": "The email doesn't exists, do you want to register it?",
     "incorrectPass": "The password is incorrect, try again.",
     "loginOk": "Successful login!",
+    "notUserBiometry": "Log in before using biometry.",
+
+    "mainTitle": "Todo List",
 
     "categoryJob": "Job",
     "categorySports": "Sport",

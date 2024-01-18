@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../pages/pages.dart';
 
 class ShowDialogs {
-  static void showRegisterDialog(String title, String text, BuildContext context) {
+  static void showNormalDialog(String title, String text, BuildContext context) {
     showDialog(
       context: context,
       builder: (ctx) {
@@ -27,7 +27,7 @@ class ShowDialogs {
     );
   }
 
-  static void showLoginDialog(String title, String text, String buttonName, BuildContext context) {
+  static void showButtonDialog(String title, String text, String buttonName, BuildContext context) {
     showDialog(
       context: context,
       builder: (ctx) {

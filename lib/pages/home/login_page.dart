@@ -69,6 +69,11 @@ class __LoginPageState extends State<LoginPage> {
               TextButton(
                 child: Text(words.noAccount),
                 onPressed:() => loginForm.logic.navigateToRegister(),
+              ),
+              const SizedBox(height: 15,),
+              InkWell(
+                child: const Icon(Icons.fingerprint, size: 45,),
+                onTap: () => loginForm.bioLogic.authenticate(words),
               )              
             ]
           )

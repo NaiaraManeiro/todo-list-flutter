@@ -8,6 +8,7 @@ import '../pages/pages.dart';
 import '../providers/providers.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
+import '../assets/constants.dart' as constants;
 
 class LoginLogic{
 
@@ -50,14 +51,15 @@ class LoginLogic{
 
     if (user == null) {
       //The email does not exist
-      ShowDialogs.showLoginDialog(words.dialogAlertTitle, words.incorrectPass, words.singUp, _provider.context);
+      ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.incorrectPass, words.singUp, _provider.context);
     } else {
       //Check if the password is correct
       final savedPass = EncryptUtil().decrypt(user.password);
       if (savedPass != password) {
-        ShowDialogs.showRegisterDialog(words.dialogAlertTitle, words.incorrectPass, _provider.context);
+        ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.incorrectPass, _provider.context);
         return;
       } else {
+        SharedPrefHelper.setString(constants.email, email);
         Get.snackbar("Successful registration", words.dialogRegisterOkText, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
         Navigator.pushReplacementNamed(_provider.context, MainPage.routeName);
       }

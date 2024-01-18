@@ -72,7 +72,7 @@ class RegisterLogic{
 
   void onSubmit(AppLocalizations words) async {
     if (!_provider.isEmailOk || !_provider.isUserNameOk || !_provider.isPasswordOk || !_provider.isRePasswordOk) {
-      ShowDialogs.showRegisterDialog(words.dialogAlertTitle, words.incorrectInputs, _provider.context);
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.incorrectInputs, _provider.context);
       return;
     }
 
@@ -81,7 +81,7 @@ class RegisterLogic{
 
     if (user != null) {
       //the user already exists (the email is already saved)
-      ShowDialogs.showRegisterDialog(words.dialogAlertTitle, words.userExists, _provider.context);
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.userExists, _provider.context);
       return;
     } else {
       final encryptPassword = EncryptUtil().encrypt(_provider.password);
@@ -91,7 +91,7 @@ class RegisterLogic{
 
     if (id == -1) {
       //register fail
-      ShowDialogs.showRegisterDialog(words.dialogAlertTitle, words.dialogRegisterFailText, _provider.context);
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.dialogRegisterFailText, _provider.context);
     } else {
       Get.snackbar("Successful registration", words.dialogRegisterOkText, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
       Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);

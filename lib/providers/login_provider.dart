@@ -4,6 +4,7 @@ import '../logic/logics.dart';
 
 class LoginProvider extends ChangeNotifier {
   late LoginLogic logic;
+  late BiometricLogic bioLogic;
   late BuildContext context;
 
   String email = '';
@@ -20,6 +21,7 @@ class LoginProvider extends ChangeNotifier {
 
   LoginProvider(){
     logic = LoginLogic(this);
+    bioLogic = BiometricLogic(this);
   }
 
   void setContext(BuildContext context){
