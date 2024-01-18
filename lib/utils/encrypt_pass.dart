@@ -15,7 +15,7 @@ class EncryptUtil{
 
   static Encrypter _initializeEncrypter() {
     final theKey = Key.fromUtf8("my 32 length key................");
-    return Encrypter(AES(theKey));
+    return Encrypter(AES(theKey, mode: AESMode.cbc, padding: 'PKCS7'));
   }
 
   static EncryptUtil _getInstance() {
@@ -31,6 +31,6 @@ class EncryptUtil{
 
   String decrypt(String value) {
     if(value.isEmpty) return"";
-    return _encrypter.decrypt64(value, iv: iv);
+    return _encrypter.decrypt(Encrypted.fromBase64(value), iv: iv);
   }
 }
