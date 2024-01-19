@@ -20,6 +20,11 @@
 
     "mainTitle": "Todo List",
 
+    "logOut": "Log Out",
+    "language": "Language",
+    "enL": "English (EN)",
+    "esL": "Spanish (ES)",
+
     "categoryJob": "Job",
     "categorySports": "Sport",
     "categoryReading": "Reading",
@@ -28,5 +33,9 @@
 
     "dialogAlertTitle": "Alert!",
     "dialogRegisterFailText": "There was a problem in the register, try again.",
-    "dialogRegisterOkText": "The registration was successful!"
+    "dialogRegisterOkText": "The registration was successful!",
+    "dialogChangeLangTitle": "Change language",
+    "dialogChangeLangText": "Do you want to change the language to {language}?",
+    "dialogChangeLangButtonOk": "Change",
+    "dialogButtonCancel": "Cancel"
 }

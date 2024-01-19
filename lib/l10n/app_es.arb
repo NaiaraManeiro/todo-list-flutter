@@ -19,6 +19,11 @@
     "notUserBiometry": "Inicie sesión antes de usar la biometría.",
 
     "mainTitle": "Todo List",
+    
+    "logOut": "Cerrar sesión",
+    "language": "Idioma",
+    "enL": "Inglés (EN)",
+    "esL": "Español (ES)",
 
     "categoryJob": "Trabajo",
     "categorySports": "Deporte",
@@ -28,5 +33,9 @@
 
     "dialogAlertTitle": "¡Alerta!",
     "dialogRegisterFailText": "Hubo in problema con el registro, intentelo de nuevo.",
-    "dialogRegisterOkText": "¡El registro fue exitoso!"
+    "dialogRegisterOkText": "¡El registro fue exitoso!",
+    "dialogChangeLangTitle": "Cambio de idioma",
+    "dialogChangeLangText": "¿Quieres cambiar el idioma a {language}?",
+    "dialogChangeLangButtonOk": "Cambiar",
+    "dialogButtonCancel": "Cancelar"
 }
