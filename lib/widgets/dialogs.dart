@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../pages/pages.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShowDialogs {
   static void showNormalDialog(String title, String text, BuildContext context) {
@@ -27,7 +26,8 @@ class ShowDialogs {
     );
   }
 
-  static void showButtonDialog(String title, String text, String buttonName, BuildContext context) {
+  static void showButtonDialog(String title, String text, String buttonName, BuildContext context, Function onPressedCallback) {
+    AppLocalizations words = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (ctx) {
@@ -49,7 +49,11 @@ class ShowDialogs {
           actions: [
             TextButton(
               child: Text(buttonName),
-              onPressed: () => Navigator.pushReplacementNamed(context, RegisterPage.routeName),
+              onPressed: () => onPressedCallback(),
+            ),
+            TextButton(
+              child: Text(words.dialogButtonCancel),
+              onPressed: () => Navigator.of(context).pop()
             )
           ],
         );

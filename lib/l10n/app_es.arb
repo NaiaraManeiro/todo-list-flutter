@@ -32,6 +32,8 @@
     "categoryGeneral": "General",
     "tasks": "tareas",
     "task": "tarea",
+    "editCategory": "Editar Categoría",
+    "deleteCategory": "Eliminar Categoría",
 
     "dialogAlertTitle": "¡Alerta!",
     "dialogRegisterFailText": "Hubo in problema con el registro, intentelo de nuevo.",
@@ -39,5 +41,6 @@
     "dialogChangeLangTitle": "Cambio de idioma",
     "dialogChangeLangText": "¿Quieres cambiar el idioma a {language}?",
     "dialogChangeLangButtonOk": "Cambiar",
-    "dialogButtonCancel": "Cancelar"
+    "dialogButtonCancel": "Cancelar",
+    "dialogDeleteCategoryText": "¿Estás seguro que quieres eliminar la categoría?"
 }

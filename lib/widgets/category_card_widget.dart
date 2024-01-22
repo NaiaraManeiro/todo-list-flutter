@@ -1,5 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list_flutter/main.dart';
+
+import '../providers/providers.dart';
+import 'widgets.dart';
 
 class CardItem {
   late IconData icon;
@@ -14,6 +19,8 @@ class CardItem {
 class CategoryCard {
 
   static Widget getCategoryCard(BuildContext context, CardItem item) {
+    final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+    
     return GestureDetector (
       child: Card(
         child: Padding(
@@ -34,12 +41,9 @@ class CategoryCard {
                       child: Icon(item.icon, color: item.color,),
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.more_vert_outlined, color: item.color),
-                    onPressed: () {
-                        
-                    },
-                  )
+                  CardsMenu(iconColor: item.color, 
+                    onEdit: () async { mainProvider.logic.editCategories(item.nameCategory); }, 
+                    onDelete: () async { mainProvider.logic.deleteCategories(item.nameCategory); })
                 ]
               ),
               const SizedBox(height: 50,),

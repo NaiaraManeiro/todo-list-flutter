@@ -111,4 +111,12 @@ class SQLHelper {
     }
     return null;
   }
+
+  static Future<int> deleteUserCategory(String email, String nameCategory) async {
+    final db = await SQLHelper.db();
+
+    final id = await db.delete('categoriesU', where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+
+    return id;
+  }
 }

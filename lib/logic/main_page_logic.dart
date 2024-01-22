@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/helpers.dart';
 import '../providers/providers.dart';
@@ -25,5 +26,23 @@ class MainPageLogic {
         return CategoryCard.getCategoryCard(context, _provider.categories!.elementAt(index));
       });
     }
+  }
+
+  void deleteCategories(String nameCategory) async {
+    AppLocalizations words = AppLocalizations.of(_provider.context)!;
+    final email = await SharedPrefHelper.getString(constants.email);
+
+    ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.dialogDeleteCategoryText, words.deleteCategory, _provider.context, 
+      () async {
+        await SQLHelper.deleteUserCategory(email, nameCategory).then((_) {
+          Navigator.of(_provider.context).pop();
+          _provider.categories!.removeWhere((element) => element.nameCategory == nameCategory);
+          _provider.refresh();
+        });
+      });
+  }
+
+  void editCategories(String nameCategory) async {
+
   }
 }
