@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../model/models.dart';
+import '../widgets/widgets.dart';
+import 'helpers.dart';
 
 class SQLHelper {
   static const _databaseName = "TodoApp.db";
@@ -26,7 +30,7 @@ class SQLHelper {
         emailU TEXT NOT NULL,
         name TEXT NOT NULL,
         icon TEXT NOT NULL,
-        iconColor TEXT NOT NULL,
+        iconColor INTEGER NOT NULL,
         totalProgress TEXT NOT NULL,
         totalTime TEXT NOT NULL,
         PRIMARY KEY (emailU, name))""");
@@ -64,20 +68,6 @@ class SQLHelper {
     final id = await db.insert('users', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
 
-    //Set the 5 default categories tu the user
-    final List<Map<String, dynamic>> dataCList = [
-      {'emailU': email, 'name': words.categoryJob, 'icon': "Icons.work_outlined", 'iconColor': "Colors.grey", 'totalProgress': "0", 'totalTime': "0"},
-      {'emailU': email, 'name': words.categorySports, 'icon': "Icons.sports_soccer_outlined", 'iconColor': 'Colors.lightBlue', 'totalProgress': "0", 'totalTime': "0"},
-      {'emailU': email, 'name': words.categoryReading, 'icon': "Icons.book_outlined", 'iconColor': 'Colors.red', 'totalProgress': "0", 'totalTime': "0"},
-      {'emailU': email, 'name': words.categoryTravel, 'icon': "Icons.flight_outlined", 'iconColor': 'Colors.green', 'totalProgress': "0", 'totalTime': "0"},
-      {'emailU': email, 'name': words.categoryGeneral, 'icon': "Icons.check_box_outline_blank_outlined", 'iconColor': 'Colors.amber', 'totalProgress': "0", 'totalTime': "0"},
-    ];
-
-    for (var dataC in dataCList) {
-      await db.insert('categoriesU', dataC,
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
-    }
-
     return id;
   }
 
@@ -91,6 +81,33 @@ class SQLHelper {
         username: users[0]["username"], 
         password: users[0]["password"]
       );
+    }
+    return null;
+  }
+
+  //Get users categories
+  static Future<List<CardItem>?> getUserCategories(BuildContext context, String email) async {
+    AppLocalizations words = AppLocalizations.of(context)!;
+
+    final db = await SQLHelper.db();
+    List<CardItem> categories = [];
+    List<Map<String, dynamic>> categoriesU = await db.query('categoriesU', where: "emailU = ?", whereArgs: [email]);
+
+    if(categoriesU.isNotEmpty) {
+      for (Map<String, dynamic> category in categoriesU) {
+        List<Map<String, dynamic>> result = await db.rawQuery(
+          'SELECT COUNT(*) as count FROM notesU WHERE emailU = ? AND category = ?',
+            [email, category['name']],
+        );
+        int? countTareas = Sqflite.firstIntValue(result);
+        String tareas = countTareas! == 1
+          ? "$countTareas ${words.task}"
+          : "$countTareas ${words.tasks}";
+
+        categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
+          category['name'], tareas, category['totalProgress'], category['totalTime']));
+      }
+      return categories;
     }
     return null;
   }

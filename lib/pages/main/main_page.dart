@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list_flutter/helpers/helpers.dart';
 
+import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
 
 class MainPage extends StatefulWidget {
@@ -19,10 +22,9 @@ class __MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations words = AppLocalizations.of(context)!;
-    final size = MediaQuery.of(context).size;
+    final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
 
-    CardItem item = CardItem(Icons.directions_run_outlined, Colors.green, "Sports", "0 items", "0.5", "23 horas");
-    CardItem item2 = CardItem(Icons.flight_outlined, Colors.blue, "Travel", "1 item", "0.25", "5 horas");
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -31,8 +33,10 @@ class __MainPageState extends State<MainPage> {
       endDrawer: CustomDrawer.getDrawer(context),
       body: Container(
         margin: const EdgeInsets.only(top: 40, bottom: 40),
-        child: CarouselSlider(
-          items: [CategoryCard.getCategoryCard(context, item),CategoryCard.getCategoryCard(context, item2)],
+        child: mainProvider.categories == null 
+          ? Container(child: Text("Empty"),)
+          : CarouselSlider(
+          items: mainProvider.logic.getCards(context),
           options: CarouselOptions(
             aspectRatio: 16 / 9,
             height: min(size.width, size.height) - 110,

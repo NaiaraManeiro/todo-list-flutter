@@ -30,6 +30,8 @@
     "categoryReading": "Reading",
     "categoryTravel": "Travel",
     "categoryGeneral": "General",
+    "tasks": "tasks",
+    "task": "task",
 
     "dialogAlertTitle": "Alert!",
     "dialogRegisterFailText": "There was a problem in the register, try again.",

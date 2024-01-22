@@ -51,7 +51,7 @@ class LoginLogic{
 
     if (user == null) {
       //The email does not exist
-      ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.incorrectPass, words.singUp, _provider.context);
+      ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.userNoExists, words.singUp, _provider.context);
     } else {
       //Check if the password is correct
       final savedPass = EncryptUtil().decrypt(user.password);

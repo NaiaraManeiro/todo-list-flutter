@@ -13,7 +13,7 @@
     "passwordsNotMatch": "Las contraseñas no coinciden.",
     "incorrectInputs": "Por favor, compruebe los campos.",
     "userExists": "El email ya existe, por favor pruebe con otro.",
-    "userNoExists": "El email no existe, do you want to register it?",
+    "userNoExists": "El email no existe, quieres registrarlo?",
     "incorrectPass": "La contraseña es incorrecta, pruebe de nuevo.",
     "loginOk": "¡Inicio de sesión exitoso!",
     "notUserBiometry": "Inicie sesión antes de usar la biometría.",
@@ -30,6 +30,8 @@
     "categoryReading": "Lectura",
     "categoryTravel": "Viajes",
     "categoryGeneral": "General",
+    "tasks": "tareas",
+    "task": "tarea",
 
     "dialogAlertTitle": "¡Alerta!",
     "dialogRegisterFailText": "Hubo in problema con el registro, intentelo de nuevo.",
