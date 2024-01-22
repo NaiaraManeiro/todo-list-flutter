@@ -33,6 +33,7 @@ class SQLHelper {
         iconColor INTEGER NOT NULL,
         totalProgress TEXT NOT NULL,
         totalTime TEXT NOT NULL,
+        isNew BOOLEAN NOT NULL,
         PRIMARY KEY (emailU, name))""");
     await database.execute("""CREATE TABLE IF NOT EXISTS notesU(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -85,13 +86,13 @@ class SQLHelper {
     return null;
   }
 
-  //Get users categories
+  //Get users categories for the carrousel
   static Future<List<CardItem>?> getUserCategories(BuildContext context, String email) async {
     AppLocalizations words = AppLocalizations.of(context)!;
 
     final db = await SQLHelper.db();
     List<CardItem> categories = [];
-    List<Map<String, dynamic>> categoriesU = await db.query('categoriesU', where: "emailU = ?", whereArgs: [email]);
+    List<Map<String, dynamic>> categoriesU = await db.query('categoriesU', where: "emailU = ? AND isNew = ?", whereArgs: [email, false]);
 
     if(categoriesU.isNotEmpty) {
       for (Map<String, dynamic> category in categoriesU) {
@@ -112,6 +113,23 @@ class SQLHelper {
     return null;
   }
 
+  //Get users categories
+  static Future<List<CardItem>?> getCategories(String email) async {
+    final db = await SQLHelper.db();
+    List<CardItem> categories = [];
+    List<Map<String, dynamic>> categoriesU = await db.query('categoriesU', where: "emailU = ?", whereArgs: [email]);
+
+    if(categoriesU.isNotEmpty) {
+      for (Map<String, dynamic> category in categoriesU) {
+        categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
+          category['name'], "0", category['totalProgress'], category['totalTime']));
+      }
+      return categories;
+    }
+    return null;
+  }
+
+  //Delete category of user
   static Future<int> deleteUserCategory(String email, String nameCategory) async {
     final db = await SQLHelper.db();
 

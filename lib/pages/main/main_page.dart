@@ -32,7 +32,7 @@ class __MainPageState extends State<MainPage> {
       endDrawer: CustomDrawer.getDrawer(context),
       body: Container(
         margin: const EdgeInsets.only(top: 40, bottom: 40),
-        child: mainProvider.categories == null 
+        child: mainProvider.userCategories == null 
           ? Container(child: Text("Empty"),)
           : CarouselSlider(
           items: mainProvider.logic.getCards(context),
@@ -44,7 +44,11 @@ class __MainPageState extends State<MainPage> {
             enlargeCenterPage: true,
           ),
         ) 
-      )
+      ),
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButtonLocation:
+        FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: const CircleListFloatingButton()
     );
   }
 }

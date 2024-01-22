@@ -13,19 +13,24 @@ class MainPageLogic {
 
   MainPageLogic(this._provider);
 
-  Future<List<CardItem>?> getCategories(BuildContext context) async {
+  Future<List<CardItem>?> getUserCategories(BuildContext context) async {
     final email = await SharedPrefHelper.getString(constants.email);
     return await SQLHelper.getUserCategories(context, email);
   }
 
   List<Widget>? getCards(context) {
-    if (_provider.categories == null) {
+    if (_provider.userCategories == null) {
       return null;
     } else {
-      return List.generate(_provider.categories!.length, (index) {
-        return CategoryCard.getCategoryCard(context, _provider.categories!.elementAt(index));
+      return List.generate(_provider.userCategories!.length, (index) {
+        return CategoryCard.getCategoryCard(context, _provider.userCategories!.elementAt(index));
       });
     }
+  }
+
+  Future<List<CardItem>?> getCategories() async {
+    final email = await SharedPrefHelper.getString(constants.email);
+    return await SQLHelper.getCategories(email);
   }
 
   void deleteCategories(String nameCategory) async {
@@ -36,7 +41,7 @@ class MainPageLogic {
       () async {
         await SQLHelper.deleteUserCategory(email, nameCategory).then((_) {
           Navigator.of(_provider.context).pop();
-          _provider.categories!.removeWhere((element) => element.nameCategory == nameCategory);
+          _provider.userCategories!.removeWhere((element) => element.nameCategory == nameCategory);
           _provider.refresh();
         });
       });
