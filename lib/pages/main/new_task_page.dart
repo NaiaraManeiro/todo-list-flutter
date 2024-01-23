@@ -42,7 +42,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                 } 
               ),
         actions: <Widget>[
-          IconButton(icon: const Icon(Icons.check), onPressed: () => categoryProvider.logic.saveTasks())
+          IconButton(icon: const Icon(Icons.check), onPressed: () => categoryProvider.logic.saveTasks(item.nameCategory))
         ],
       ),
       body: Container(

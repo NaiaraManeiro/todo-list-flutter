@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
+import '../helpers/helpers.dart';
 import '../model/models.dart';
+import '../pages/pages.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
+import '../../assets/constants.dart' as constants;
 
 class CategoryLogic {
 
@@ -24,8 +27,13 @@ class CategoryLogic {
     }
   }
 
-  void saveTasks() {
-
+  void saveTasks(String nameCategory) async {
+    final email = await SharedPrefHelper.getString(constants.email);
+    SQLHelper.addTasks(email, nameCategory, _provider.newTaskList)
+      .then((value) => {
+        _provider.logic.clean(),
+        Navigator.pushReplacementNamed(_provider.context, MainPage.routeName),
+      }); 
   }
 
   void addNewTask() {
