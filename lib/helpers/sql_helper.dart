@@ -130,11 +130,16 @@ class SQLHelper {
   }
 
   //Delete category of user
-  static Future<int> deleteUserCategory(String email, String nameCategory) async {
+  static Future<void> deleteUserCategory(String email, String nameCategory) async {
     final db = await SQLHelper.db();
 
-    final id = await db.delete('categoriesU', where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+    Map<String, dynamic> values = {
+      "isNew": true,
+    };
 
-    return id;
+    await db.update('categoriesU', values, where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+
+    //Detelete the task related to the category
+    await db.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
   }
 }

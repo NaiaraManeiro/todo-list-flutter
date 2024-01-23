@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/helpers.dart';
+import '../model/models.dart';
 import '../providers/providers.dart';
 import '../../assets/constants.dart' as constants;
 import '../widgets/widgets.dart';

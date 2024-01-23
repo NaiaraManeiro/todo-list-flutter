@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../logic/logics.dart';
-import '../widgets/widgets.dart';
+import '../model/models.dart';
 
 class MainPageProvider extends ChangeNotifier {
   late MainPageLogic logic;

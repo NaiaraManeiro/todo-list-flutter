@@ -34,6 +34,9 @@
     "task": "task",
     "editCategory": "Edit Category",
     "deleteCategory": "Delete Category",
+    "startDate": "start date",
+    "endDate": "end date",
+    "newTask": "Add a new task",
 
     "dialogAlertTitle": "Alert!",
     "dialogRegisterFailText": "There was a problem in the register, try again.",
@@ -42,5 +45,6 @@
     "dialogChangeLangText": "Do you want to change the language to {language}?",
     "dialogChangeLangButtonOk": "Change",
     "dialogButtonCancel": "Cancel",
-    "dialogDeleteCategoryText": "Are you sure you want to delete the category?"
+    "dialogDeleteCategoryText": "Are you sure you want to delete the category?",
+    "dialogWrongDateText": "The end date can't be sooner than the start day."
 }

@@ -34,6 +34,9 @@
     "task": "tarea",
     "editCategory": "Editar Categoría",
     "deleteCategory": "Eliminar Categoría",
+    "startDate": "fecha inicio",
+    "endDate": "fecha fin",
+    "newTask": "Añade una nueva tarea",
 
     "dialogAlertTitle": "¡Alerta!",
     "dialogRegisterFailText": "Hubo in problema con el registro, intentelo de nuevo.",
@@ -42,5 +45,6 @@
     "dialogChangeLangText": "¿Quieres cambiar el idioma a {language}?",
     "dialogChangeLangButtonOk": "Cambiar",
     "dialogButtonCancel": "Cancelar",
-    "dialogDeleteCategoryText": "¿Estás seguro que quieres eliminar la categoría?"
+    "dialogDeleteCategoryText": "¿Estás seguro que quieres eliminar la categoría?",
+    "dialogWrongDateText": "La fecha final no puede ser antes que la fecha de inicio."
 }

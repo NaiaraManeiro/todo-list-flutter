@@ -1,20 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list_flutter/main.dart';
 
+import '../model/models.dart';
 import '../providers/providers.dart';
 import 'widgets.dart';
-
-class CardItem {
-  late IconData icon;
-  late MaterialColor color;
-  late String nameCategory;
-  late String totalTareas;
-  late String totalProgress;
-  late String totalTime;
-  CardItem(this.icon, this.color, this.nameCategory, this.totalTareas, this.totalProgress, this.totalTime);
-}
 
 class CategoryCard {
 

@@ -2,9 +2,9 @@ import 'package:circle_list/circle_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../model/models.dart';
 import '../pages/pages.dart';
 import '../providers/providers.dart';
-import 'widgets.dart';
 
 class CircleListFloatingButton extends StatefulWidget {
   const CircleListFloatingButton({super.key});
@@ -85,7 +85,11 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
             _showCircleList = false;
             _controller.reverse();
           });
-          Navigator.pushReplacementNamed(context, NewTaskPage.routeName);
+          Navigator.pushReplacementNamed(context, NewTaskPage.routeName, 
+            arguments: {
+              'item': item
+            }
+          );
         },
         color: Colors.white,
       ),

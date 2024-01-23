@@ -3,3 +3,4 @@ export './home/register_page.dart';
 export './home/splash_page.dart';
 
 export './main/main_page.dart';
+export './main/new_task_page.dart';
