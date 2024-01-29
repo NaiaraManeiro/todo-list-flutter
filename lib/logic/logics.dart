@@ -3,3 +3,4 @@ export 'login_logic.dart';
 export 'biometric_logic.dart';
 export 'main_page_logic.dart';
 export 'category_logic.dart';
+export 'task_logic.dart';

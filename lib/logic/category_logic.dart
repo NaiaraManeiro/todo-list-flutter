@@ -41,7 +41,7 @@ class CategoryLogic {
     String text = controller.text;
     if (text.isEmpty || (_provider.startDate == DateTime(1889) && _provider.finishDate != DateTime(1889)) 
       || (_provider.startDate != DateTime(1889) && _provider.finishDate == DateTime(1889))) return;
-    _provider.newTaskList.add(TaskModel(text, DateFormat('dd-MM-yyyy').format(_provider.startDate).toString(), 
+    _provider.newTaskList.add(TaskModel(0, text, DateFormat('dd-MM-yyyy').format(_provider.startDate).toString(), 
       DateFormat('dd-MM-yyyy').format(_provider.finishDate).toString(), '0'));
     controller.clear();
     _provider.refresh();

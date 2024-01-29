@@ -24,6 +24,7 @@ class AppState extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => LoginProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => MainPageProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => CategoryProvider(), lazy: false,),
+          ChangeNotifierProvider(create: (_) => TaskProvider(), lazy: false,),
         ],
         child: const MyApp(),
       );
@@ -79,6 +80,7 @@ class _MyAppState extends State<MyApp> {
         SplashPage.routeName: (_) => const SplashPage(),
         MainPage.routeName: (_) => const MainPage(),
         NewTaskPage.routeName: (_) => const NewTaskPage(),
+        InfoCategoryPage.routeName: (_) => const InfoCategoryPage(),
       },
     );
   }

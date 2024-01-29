@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../model/models.dart';
-import '../widgets/widgets.dart';
 import 'helpers.dart';
 
 class SQLHelper {
@@ -202,5 +200,50 @@ class SQLHelper {
       final data = {'emailU': email, 'category': nameCategory, 'name': task.name, 'dateIni': task.dateIni, 'dateFin': task.dateFin, 'progress': task.progress};
       await db.insert('notesU', data);
     }
+  }
+
+  //Get task of a category
+  static Future<List<TaskModel>> getTasksCategory(String email, String nameCategory) async {
+    final db = await SQLHelper.db();
+
+    List<TaskModel> tasks = [];
+
+    List<Map<String, dynamic>> tasksC = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+
+    for (Map<String, dynamic> tc in tasksC) {
+      tasks.add(TaskModel(tc['id'], tc['name'], tc['dateIni'], tc['dateFin'], tc['progress']));
+    }
+
+    return tasks;
+  }
+
+  //Update task progress
+  static Future<void> updateTaskProgress(int id, String email, String nameCategory, String progress) async {
+    final db = await SQLHelper.db();
+
+    Map<String, dynamic> values = {
+      "progress": progress,
+    };
+
+    await db.update('notesU', values, where: "id = ? AND emailU = ? AND category = ?", whereArgs: [id, email, nameCategory]);
+  }
+
+  //Update category progress
+  static Future<void> updateCategoryProgress(String email, String nameCategory) async {
+    final db = await SQLHelper.db();
+
+    int progress = 0;
+
+    List<Map<String, dynamic>> tasks = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+
+    for (Map<String, dynamic> task in tasks) {
+      progress = progress + int.parse(task['progress']);
+    }
+
+    Map<String, dynamic> values = {
+      "totalProgress": (progress/tasks.length).round(),
+    };
+
+    await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
   }
 }
