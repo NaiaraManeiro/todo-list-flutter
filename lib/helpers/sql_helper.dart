@@ -90,70 +90,73 @@ class SQLHelper {
 
     final db = await SQLHelper.db();
     List<CardItem> categories = [];
-    List<Map<String, dynamic>> categoriesU = await db.query('categoriesU', where: "emailU = ? AND isNew = ?", whereArgs: [email, false]);
 
-    if(categoriesU.isNotEmpty) {
-      for (Map<String, dynamic> category in categoriesU) {
-        List<Map<String, dynamic>> notes = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, category['name']]);
-        if (notes.isNotEmpty) {
-          int countTareas = notes.length;
-          String tareas = countTareas == 1
-          ? "$countTareas ${words.task}"
-          : "$countTareas ${words.tasks}";
+    return await db.transaction<List<CardItem>?>( (txn) async {
+      List<Map<String, dynamic>> categoriesU = await txn.query('categoriesU', where: "emailU = ? AND isNew = ?", whereArgs: [email, false]);
 
-          int percentage = 0;
-          DateTime earliestDate = DateTime(1890);
-          DateTime latestDate = DateTime(1890);
+      if(categoriesU.isNotEmpty) {
+        for (Map<String, dynamic> category in categoriesU) {
+          List<Map<String, dynamic>> notes = await txn.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, category['name']]);
+          if (notes.isNotEmpty) {
+            int countTareas = notes.length;
+            String tareas = countTareas == 1
+            ? "$countTareas ${words.task}"
+            : "$countTareas ${words.tasks}";
 
-          for (Map<String, dynamic> note in notes) {
-            percentage = percentage + int.parse(note['progress']);
+            int percentage = 0;
+            DateTime earliestDate = DateTime(1890);
+            DateTime latestDate = DateTime(1890);
 
-            List<String> ini = note['dateIni'].split('-');    
-            DateTime dateIni = DateTime(int.parse(ini[2]), int.parse(ini[1]), int.parse(ini[0]));
-            if (dateIni.isAfter(earliestDate)) {
-              earliestDate = dateIni;
+            for (Map<String, dynamic> note in notes) {
+              percentage = percentage + int.parse(note['progress']);
+
+              List<String> ini = note['dateIni'].split('-');    
+              DateTime dateIni = DateTime(int.parse(ini[2]), int.parse(ini[1]), int.parse(ini[0]));
+              if (dateIni.isAfter(earliestDate)) {
+                earliestDate = dateIni;
+              }
+
+              List<String> fin = note['dateFin'].split('-');  
+              DateTime dateFin = DateTime(int.parse(fin[2]), int.parse(fin[1]), int.parse(fin[0]));
+              if (dateFin.isAfter(latestDate)) {
+                latestDate = dateFin;
+              }
             }
 
-            List<String> fin = note['dateFin'].split('-');  
-            DateTime dateFin = DateTime(int.parse(fin[2]), int.parse(fin[1]), int.parse(fin[0]));
-            if (dateFin.isAfter(latestDate)) {
-              latestDate = dateFin;
+            Duration daysDiff = latestDate.difference(earliestDate);
+            int totalMonths = daysDiff.inDays ~/ 30; 
+            int remainingDays = daysDiff.inDays % 30;
+            String dias = ""; 
+
+            if (totalMonths == 0) {
+              dias = daysDiff.inDays == 1
+                ? "${daysDiff.inDays} ${words.day}"
+                : "${daysDiff.inDays} ${words.days}";
+            } else if (remainingDays == 0) {
+              dias = totalMonths == 1
+                ? "$totalMonths ${words.month}"
+                : "$totalMonths ${words.months}";
+            } else {
+              String months = totalMonths == 1
+                ? "$totalMonths ${words.month} "
+                : "$totalMonths ${words.months} ";
+              String days = daysDiff.inDays == 1
+                ? "${daysDiff.inDays} ${words.day}"
+                : "${daysDiff.inDays} ${words.days}";
+              dias = months + days;
             }
-          }
 
-          Duration daysDiff = latestDate.difference(earliestDate);
-          int totalMonths = daysDiff.inDays ~/ 30; 
-          int remainingDays = daysDiff.inDays % 30;
-          String dias = ""; 
-
-          if (totalMonths == 0) {
-            dias = daysDiff.inDays == 1
-              ? "${daysDiff.inDays} ${words.day}"
-              : "${daysDiff.inDays} ${words.days}";
-          } else if (remainingDays == 0) {
-            dias = totalMonths == 1
-              ? "$totalMonths ${words.month}"
-              : "$totalMonths ${words.months}";
+            categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
+              category['name'], tareas, percentage == 0 ? '0' : '${percentage/countTareas}', dias));
           } else {
-            String months = totalMonths == 1
-              ? "$totalMonths ${words.month} "
-              : "$totalMonths ${words.months} ";
-            String days = daysDiff.inDays == 1
-              ? "${daysDiff.inDays} ${words.day}"
-              : "${daysDiff.inDays} ${words.days}";
-            dias = months + days;
+            categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
+              category['name'], "0 ${words.tasks}", category['totalProgress'], category['totalTime']));
           }
-
-          categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-            category['name'], tareas, percentage == 0 ? '0' : '${percentage/countTareas}', dias));
-        } else {
-          categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-            category['name'], "0 ${words.tasks}", category['totalProgress'], category['totalTime']));
         }
+        return categories;
       }
-      return categories;
-    }
-    return null;
+      return null;
+    });
   }
 
   //Get users categories
@@ -180,10 +183,13 @@ class SQLHelper {
       "isNew": true,
     };
 
-    await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+    await db.transaction((txn) async {
 
-    //Detelete the task related to the category
-    await db.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+      await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+
+      //Detelete the task related to the category
+      await txn.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+    });
   }
 
   //Add tasks to the user and category
@@ -194,12 +200,16 @@ class SQLHelper {
       "isNew": false,
     };
 
-    await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+    await db.transaction((txn) async {
+      await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
 
-    for (TaskModel task in tasks) {
-      final data = {'emailU': email, 'category': nameCategory, 'name': task.name, 'dateIni': task.dateIni, 'dateFin': task.dateFin, 'progress': task.progress};
-      await db.insert('notesU', data);
-    }
+      await txn.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+      
+      for (TaskModel task in tasks) {
+        final data = {'emailU': email, 'category': nameCategory, 'name': task.name, 'dateIni': task.dateIni, 'dateFin': task.dateFin, 'progress': task.progress};
+        await txn.insert('notesU', data);
+      }
+    });
   }
 
   //Get task of a category
@@ -211,7 +221,7 @@ class SQLHelper {
     List<Map<String, dynamic>> tasksC = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
 
     for (Map<String, dynamic> tc in tasksC) {
-      tasks.add(TaskModel(tc['id'], tc['name'], tc['dateIni'], tc['dateFin'], tc['progress']));
+      tasks.add(TaskModel(id: tc['id'], name: tc['name'], dateIni: tc['dateIni'], dateFin: tc['dateFin'], progress: tc['progress']));
     }
 
     return tasks;
@@ -234,16 +244,18 @@ class SQLHelper {
 
     int progress = 0;
 
-    List<Map<String, dynamic>> tasks = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+    await db.transaction((txn) async {
+      List<Map<String, dynamic>> tasks = await txn.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
 
-    for (Map<String, dynamic> task in tasks) {
-      progress = progress + int.parse(task['progress']);
-    }
+      for (Map<String, dynamic> task in tasks) {
+        progress = progress + int.parse(task['progress']);
+      }
 
-    Map<String, dynamic> values = {
-      "totalProgress": (progress/tasks.length).round(),
-    };
+      Map<String, dynamic> values = {
+        "totalProgress": (progress/tasks.length).round(),
+      };
 
-    await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+      await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+    });
   }
 }

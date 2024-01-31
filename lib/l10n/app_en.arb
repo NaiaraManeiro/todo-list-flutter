@@ -50,5 +50,7 @@
     "dialogChangeLangButtonOk": "Change",
     "dialogButtonCancel": "Cancel",
     "dialogDeleteCategoryText": "Are you sure you want to delete the category?",
-    "dialogWrongDateText": "The end date can't be sooner than the start day."
+    "dialogWrongDateText": "The end date can't be sooner than the start day.",
+    "dialogDeleteTaskText": "Are you sure you want to delete the task?",
+    "dialogDeleteTaskButtonOk": "Delete"
 }

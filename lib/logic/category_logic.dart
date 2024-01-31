@@ -36,13 +36,24 @@ class CategoryLogic {
       }); 
   }
 
-  void addNewTask() {
+  void addNewTask(int index) {
     final controller = _provider.textEditingController;
     String text = controller.text;
     if (text.isEmpty || (_provider.startDate == DateTime(1889) && _provider.finishDate != DateTime(1889)) 
       || (_provider.startDate != DateTime(1889) && _provider.finishDate == DateTime(1889))) return;
-    _provider.newTaskList.add(TaskModel(0, text, DateFormat('dd-MM-yyyy').format(_provider.startDate).toString(), 
-      DateFormat('dd-MM-yyyy').format(_provider.finishDate).toString(), '0'));
+
+    if (index == -1) {
+      _provider.newTaskList.add(TaskModel(id: 0, name: text, dateIni: DateFormat('dd-MM-yyyy').format(_provider.startDate).toString(), 
+      dateFin: DateFormat('dd-MM-yyyy').format(_provider.finishDate).toString(), progress: '0'));
+    } else{
+      TaskModel updatedTask = _provider.newTaskList[index].copyWith(
+        name: text,
+        dateIni: DateFormat('dd-MM-yyyy').format(_provider.startDate).toString(),
+        dateFin: DateFormat('dd-MM-yyyy').format(_provider.finishDate).toString()
+      );
+      _provider.newTaskList[index] = updatedTask;
+    }
+    
     controller.clear();
     _provider.refresh();
   }
@@ -127,6 +138,11 @@ class CategoryLogic {
         }
       }
     });
+  }
+
+  void deleteTask(int index) async {
+    _provider.newTaskList.removeAt(index);
+    _provider.refresh();
   }
 
   void clean() {

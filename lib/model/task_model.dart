@@ -5,5 +5,27 @@ class TaskModel {
   late String dateIni;
   late String dateFin;
   late String progress;
-  TaskModel(this.id, this.name, this.dateIni, this.dateFin, this.progress);
+  TaskModel({
+    required this.id,
+    required this.name,
+    required this.dateIni,
+    required this.dateFin,
+    required this.progress
+  });
+
+  TaskModel copyWith({
+    int? id,
+    String? name,
+    String? dateIni,
+    String? dateFin,
+    String? progress
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      dateIni: dateIni ?? this.dateIni,
+      dateFin: dateFin ?? this.dateFin,
+      progress: progress ?? this.progress,
+    );
+  }
 }

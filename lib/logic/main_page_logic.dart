@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/helpers.dart';
 import '../model/models.dart';
+import '../pages/pages.dart';
 import '../providers/providers.dart';
 import '../../assets/constants.dart' as constants;
 import '../widgets/widgets.dart';
@@ -34,7 +35,7 @@ class MainPageLogic {
     return await SQLHelper.getCategories(email);
   }
 
-  void deleteCategories(String nameCategory) async {
+  void deleteCategories(String nameCategory, TaskProvider taskProvider) async {
     AppLocalizations words = AppLocalizations.of(_provider.context)!;
     final email = await SharedPrefHelper.getString(constants.email);
 
@@ -48,7 +49,15 @@ class MainPageLogic {
       });
   }
 
-  void editCategories(String nameCategory) async {
-
+  void editCategories(CardItem item) async {
+    final email = await SharedPrefHelper.getString(constants.email);
+    SQLHelper.getTasksCategory(email, item.nameCategory).then((tasks) => 
+      Navigator.pushReplacementNamed(_provider.context, NewTaskPage.routeName, 
+        arguments: {
+          'item' : item,
+          'tasks': tasks
+        }
+      )
+    );
   }
 }

@@ -87,7 +87,8 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
           });
           Navigator.pushReplacementNamed(context, NewTaskPage.routeName, 
             arguments: {
-              'item': item
+              'item': item,
+              'tasks': []
             }
           );
         },

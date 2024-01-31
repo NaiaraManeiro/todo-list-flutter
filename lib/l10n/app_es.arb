@@ -50,5 +50,7 @@
     "dialogChangeLangButtonOk": "Cambiar",
     "dialogButtonCancel": "Cancelar",
     "dialogDeleteCategoryText": "¿Estás seguro que quieres eliminar la categoría?",
-    "dialogWrongDateText": "La fecha final no puede ser antes que la fecha de inicio."
+    "dialogWrongDateText": "La fecha final no puede ser antes que la fecha de inicio.",
+    "dialogDeleteTaskText": "¿Estás seguro que quieres eliminar la tarea?",
+    "dialogDeleteTaskButtonOk": "Eliminar"
 }
