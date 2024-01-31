@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../model/models.dart';
 import 'helpers.dart';
@@ -29,7 +30,7 @@ class SQLHelper {
         name TEXT NOT NULL,
         icon TEXT NOT NULL,
         iconColor INTEGER NOT NULL,
-        totalProgress TEXT NOT NULL,
+        totalProgress INTEGER NOT NULL,
         totalTime TEXT NOT NULL,
         isNew BOOLEAN NOT NULL,
         PRIMARY KEY (emailU, name))""");
@@ -40,7 +41,7 @@ class SQLHelper {
         name TEXT NOT NULL,
         dateIni TEXT NOT NULL,
         dateFin TEXT NOT NULL,
-        progress TEXT NOT NULL,
+        progress INTEGER NOT NULL,
         UNIQUE (id, emailU, category))""");
   }
 
@@ -66,6 +67,19 @@ class SQLHelper {
     final data = {'email': email, 'username': username, 'password': encryptPassword};
     final id = await db.insert('users', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
+
+    final List<Map<String, dynamic>> dataCList = [
+      {'emailU': email, 'name': words.categoryJob, 'icon': "62677", 'iconColor': const Color(0xFFE6B0AA).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+      {'emailU': email, 'name': words.categorySports, 'icon': "62421", 'iconColor': const Color(0xFFD7BDE2).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+      {'emailU': email, 'name': words.categoryReading, 'icon': "61151", 'iconColor': const Color(0xFFA9CCE3).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+      {'emailU': email, 'name': words.categoryTravel, 'icon': "61573", 'iconColor': const Color(0xFFABEBC6).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+      {'emailU': email, 'name': words.categoryGeneral, 'icon': "61253", 'iconColor': const Color(0xFFF9E79F).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+    ];
+
+    for (var dataC in dataCList) {
+      await db.insert('categoriesU', dataC,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    }
 
     return id;
   }
@@ -147,10 +161,10 @@ class SQLHelper {
             }
 
             categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-              category['name'], tareas, percentage == 0 ? '0' : '${percentage/countTareas}', dias));
+              category['name'], tareas, percentage == 0 ? 0 : percentage~/countTareas, dias));
           } else {
             categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-              category['name'], "0 ${words.tasks}", category['totalProgress'], category['totalTime']));
+              category['name'], "0 ${words.tasks}", int.parse(category['totalProgress']), category['totalTime']));
           }
         }
         return categories;
@@ -168,7 +182,7 @@ class SQLHelper {
     if(categoriesU.isNotEmpty) {
       for (Map<String, dynamic> category in categoriesU) {
         categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-          category['name'], "0", category['totalProgress'], category['totalTime']));
+          category['name'], "0", int.parse(category['totalProgress']), category['totalTime']));
       }
       return categories;
     }
@@ -221,14 +235,14 @@ class SQLHelper {
     List<Map<String, dynamic>> tasksC = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
 
     for (Map<String, dynamic> tc in tasksC) {
-      tasks.add(TaskModel(id: tc['id'], name: tc['name'], dateIni: tc['dateIni'], dateFin: tc['dateFin'], progress: tc['progress']));
+      tasks.add(TaskModel(id: tc['id'], name: tc['name'], dateIni: tc['dateIni'], dateFin: tc['dateFin'], progress: int.parse(tc['progress'])));
     }
 
     return tasks;
   }
 
   //Update task progress
-  static Future<void> updateTaskProgress(int id, String email, String nameCategory, String progress) async {
+  static Future<void> updateTaskProgress(int id, String email, String nameCategory, int progress) async {
     final db = await SQLHelper.db();
 
     Map<String, dynamic> values = {
@@ -242,24 +256,17 @@ class SQLHelper {
   static Future<int> updateCategoryProgress(String email, String nameCategory) async {
     final db = await SQLHelper.db();
 
-    int progress = 0;
+    var result = await db.rawQuery('SELECT AVG(progress) AS averageProgress FROM notesU WHERE emailU = ? AND category = ?', [email, nameCategory]);
+    var averageProgressDouble = result[0]['averageProgress'] as double? ?? 0.0;
+    var averageProgress = averageProgressDouble.round();
 
-    await db.transaction((txn) async {
-      List<Map<String, dynamic>> tasks = await txn.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
 
-      for (Map<String, dynamic> task in tasks) {
-        progress = progress + int.parse(task['progress']);
-      }
+    Map<String, dynamic> values = {
+      "totalProgress": averageProgress,
+    };
 
-      progress = (progress/tasks.length).round();
+    await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
 
-      Map<String, dynamic> values = {
-        "totalProgress": progress,
-      };
-
-      await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
-    });
-
-    return progress;
+    return averageProgress;
   }
 }

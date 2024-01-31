@@ -4,7 +4,7 @@ class TaskModel {
   late String name;
   late String dateIni;
   late String dateFin;
-  late String progress;
+  late int progress;
   TaskModel({
     required this.id,
     required this.name,
@@ -18,7 +18,7 @@ class TaskModel {
     String? name,
     String? dateIni,
     String? dateFin,
-    String? progress
+    int? progress
   }) {
     return TaskModel(
       id: id ?? this.id,

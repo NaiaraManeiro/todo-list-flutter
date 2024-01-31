@@ -68,9 +68,9 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
                           children: [
                             Checkbox(
                               activeColor: mainProvider.selectedCategory.color,
-                              value: int.parse(currentTask.progress) == 100 ? true : false,
+                              value: currentTask.progress == 100 ? true : false,
                               onChanged: (value) {
-                                taskProvider.logic.updateProgress(currentTask.id, mainProvider.selectedCategory.nameCategory, value! ? '100' : '0', mainProvider);
+                                taskProvider.logic.updateProgress(currentTask.id, mainProvider.selectedCategory.nameCategory, value! ? 100 : 0, mainProvider);
                               },
                             ),
                             const SizedBox(width: 10),
@@ -99,17 +99,17 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
                             children: [
                               Slider(
                                 activeColor: mainProvider.selectedCategory.color,
-                                value: double.parse(currentTask.progress),
+                                value: currentTask.progress.toDouble(),
                                 min: 0,
                                 max: 100,
                                 onChangeEnd: (value) {
                                   setState(() {
-                                    taskProvider.logic.updateProgress(currentTask.id, mainProvider.selectedCategory.nameCategory, value.round().toString(), mainProvider);
+                                    taskProvider.logic.updateProgress(currentTask.id, mainProvider.selectedCategory.nameCategory, value.round(), mainProvider);
                                   });
                                 }, 
                                 onChanged: (double value) {  },
                               ), 
-                              Text("${int.parse(currentTask.progress)} %")
+                              Text("${currentTask.progress} %")
                             ],
                           )
                       ]

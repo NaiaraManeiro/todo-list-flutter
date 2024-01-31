@@ -44,7 +44,7 @@ class CategoryLogic {
 
     if (index == -1) {
       _provider.newTaskList.add(TaskModel(id: 0, name: text, dateIni: DateFormat('dd-MM-yyyy').format(_provider.startDate).toString(), 
-      dateFin: DateFormat('dd-MM-yyyy').format(_provider.finishDate).toString(), progress: '0'));
+      dateFin: DateFormat('dd-MM-yyyy').format(_provider.finishDate).toString(), progress: 0));
     } else{
       TaskModel updatedTask = _provider.newTaskList[index].copyWith(
         name: text,

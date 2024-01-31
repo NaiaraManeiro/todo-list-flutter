@@ -5,7 +5,7 @@ class CardItem {
   late MaterialColor color;
   late String nameCategory;
   late String totalTareas;
-  late String totalProgress;
+  late int totalProgress;
   late String totalTime;
   CardItem(this.icon, this.color, this.nameCategory, this.totalTareas, this.totalProgress, this.totalTime);
 }
