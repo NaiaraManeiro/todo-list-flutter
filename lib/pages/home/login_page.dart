@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../helpers/helpers.dart';
 import '../../providers/providers.dart';
 import '../../ui/uis.dart';
+import '../../assets/constants.dart' as constants;
 
 class LoginPage extends StatefulWidget {
   static String routeName = "login";
@@ -20,6 +23,10 @@ class __LoginPageState extends State<LoginPage> {
     AppLocalizations words = AppLocalizations.of(context)!;
     final loginForm = Provider.of<LoginProvider>(context)..setContext(context);
 
+    //SQLHelper.cleanDatabase();
+
+    Locale newLocale = const Locale('es', 'ES');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(words.singIn),
@@ -29,6 +36,28 @@ class __LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      newLocale = const Locale('es', 'ES');
+                      Get.updateLocale(newLocale);
+                      SharedPrefHelper.setString(constants.languageCode, newLocale.languageCode);
+                    }, 
+                    child: const Text('ES', style: TextStyle(fontWeight: FontWeight.bold))
+                  ),
+                  const Text('|', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextButton(
+                    onPressed: () {
+                      newLocale = const Locale('en', 'EN');
+                      Get.updateLocale(newLocale);
+                      SharedPrefHelper.setString(constants.languageCode, newLocale.languageCode);
+                    }, 
+                    child: const Text('EN', style: TextStyle(fontWeight: FontWeight.bold))
+                  ),   
+                ],
+              ),
               Form(
                 key: loginForm.emailKey,
                 child: TextFormField(

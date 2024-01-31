@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Todo List App',
       localizationsDelegates: const [
         AppLocalizations.delegate,
