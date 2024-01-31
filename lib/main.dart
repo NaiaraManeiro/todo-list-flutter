@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
         Locale('es', 'ES'),
       ],
       debugShowCheckedModeBanner: false,
-      initialRoute: LoginPage.routeName,
+      initialRoute: SplashPage.routeName,
       routes: {
         RegisterPage.routeName: (_) => const RegisterPage(),
         LoginPage.routeName: (_) => const LoginPage(),
