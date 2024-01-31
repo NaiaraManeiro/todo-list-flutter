@@ -9,6 +9,7 @@ class MainPageProvider extends ChangeNotifier {
   late BuildContext context;
   List<CardItem>? userCategories = [];
   List<CardItem>? categories = [];
+  late CardItem selectedCategory;
 
   MainPageProvider(){
     logic = MainPageLogic(this);

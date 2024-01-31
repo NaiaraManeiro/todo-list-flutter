@@ -19,7 +19,10 @@ class TaskLogic {
     final email = await SharedPrefHelper.getString(constants.email);
     SQLHelper.updateTaskProgress(id, email, nameCategory, progress).then((value) {
       _provider.refresh();
-      SQLHelper.updateCategoryProgress(email, nameCategory).then((value) => mainProvider.refresh());
+      SQLHelper.updateCategoryProgress(email, nameCategory).then((value) {
+        mainProvider.selectedCategory.totalProgress = value.toString();
+        mainProvider.refresh();
+      });
     });
   }
 }

@@ -19,56 +19,62 @@ class InfoCategoryPage extends StatefulWidget {
 }
 
 class _InfoCategoryPageState extends State<InfoCategoryPage> {
+  List<bool> isExpandedList = [];
+
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic>? arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final CardItem item = arguments?['item'];
-
     final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
-    final taskProvider = Provider.of<TaskProvider>(context)..setContext(context, item.nameCategory);
 
-    List<bool> isExpandedList = List.filled(taskProvider.tasks.length, false);
+    final Map<String, dynamic>? arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    mainProvider.selectedCategory = arguments?['item'];
+
+    final taskProvider = Provider.of<TaskProvider>(context)..setContext(context, mainProvider.selectedCategory.nameCategory);
+
+    isExpandedList = isExpandedList.isEmpty 
+      ? List.filled(taskProvider.tasks.length, false)
+      : isExpandedList;
  
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
                 icon: Icon(Platform.isAndroid
                     ? Icons.arrow_back
-                    : Icons.arrow_back_ios, color: item.color,),
+                    : Icons.arrow_back_ios, color: mainProvider.selectedCategory.color,),
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, MainPage.routeName);
                 } 
               ),
         actions: <Widget>[
-          CardsMenu(iconColor: item.color, 
-            onEdit: () async { mainProvider.logic.editCategories(item); }, 
-            onDelete: () async { mainProvider.logic.deleteCategories(item.nameCategory, taskProvider); })
+          CardsMenu(iconColor: mainProvider.selectedCategory.color, 
+            onEdit: () async { mainProvider.logic.editCategories(mainProvider.selectedCategory); }, 
+            onDelete: () async { mainProvider.logic.deleteCategories(mainProvider.selectedCategory.nameCategory); })
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 30.0, bottom: 30.0),
         child: Column(
           children: [
-            CategoryWidget.getCategoryWidget(context, item, false),
+            CategoryWidget.getCategoryWidget(context, mainProvider.selectedCategory, false),
             const SizedBox(height: 30,),
             Expanded(
               child: ListView(
                 shrinkWrap: true,
                 children: List.generate(taskProvider.tasks.length,
                   (index) { 
+                    var currentTask = taskProvider.tasks.elementAt(index);
                     return Column(
                       children: [
                         Row(
                           children: [
                             Checkbox(
-                              activeColor: item.color,
-                              value: int.parse(taskProvider.tasks.elementAt(index).progress) * 100 == 100 ? true : false,
+                              activeColor: mainProvider.selectedCategory.color,
+                              value: int.parse(currentTask.progress) == 100 ? true : false,
                               onChanged: (value) {
-                                taskProvider.logic.updateProgress(taskProvider.tasks.elementAt(index).id, item.nameCategory, value! ? '100' : '0', mainProvider);
+                                taskProvider.logic.updateProgress(currentTask.id, mainProvider.selectedCategory.nameCategory, value! ? '100' : '0', mainProvider);
                               },
                             ),
                             const SizedBox(width: 10),
-                            Text(taskProvider.tasks.elementAt(index).name),
+                            Text(currentTask.name),
                             Expanded(
                               child: Align(
                                 alignment: Alignment.centerRight,
@@ -92,17 +98,18 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
                           Row(
                             children: [
                               Slider(
-                                activeColor: item.color,
-                                value: double.parse(taskProvider.tasks.elementAt(index).progress),
+                                activeColor: mainProvider.selectedCategory.color,
+                                value: double.parse(currentTask.progress),
                                 min: 0,
                                 max: 100,
-                                onChanged: (value) {
+                                onChangeEnd: (value) {
                                   setState(() {
-                                    taskProvider.logic.updateProgress(taskProvider.tasks.elementAt(index).id, item.nameCategory, value.round().toString(), mainProvider);
+                                    taskProvider.logic.updateProgress(currentTask.id, mainProvider.selectedCategory.nameCategory, value.round().toString(), mainProvider);
                                   });
-                                },
+                                }, 
+                                onChanged: (double value) {  },
                               ), 
-                              Text("${int.parse(taskProvider.tasks.elementAt(index).progress)} %")
+                              Text("${int.parse(currentTask.progress)} %")
                             ],
                           )
                       ]

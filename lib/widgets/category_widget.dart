@@ -10,7 +10,6 @@ class CategoryWidget {
 
   static Widget getCategoryWidget(BuildContext context, CardItem item, bool show) {
     final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
-    final taskProvider = Provider.of<TaskProvider>(context)..setContext(context, item.nameCategory);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -31,7 +30,7 @@ class CategoryWidget {
             if (show)
               CardsMenu(iconColor: item.color, 
                 onEdit: () async { mainProvider.logic.editCategories(item); }, 
-                onDelete: () async { mainProvider.logic.deleteCategories(item.nameCategory, taskProvider); })
+                onDelete: () async { mainProvider.logic.deleteCategories(item.nameCategory); })
           ]
         ),
         const SizedBox(height: 50,),
@@ -49,7 +48,7 @@ class CategoryWidget {
         ),
         Text(item.totalTareas),
         Text(
-          '${(double.parse(item.totalProgress) * 100).toStringAsFixed(0)}%',
+          '${double.parse(item.totalProgress).toStringAsFixed(0)}%',
           style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           textAlign: TextAlign.right,
         ),
@@ -59,7 +58,7 @@ class CategoryWidget {
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             child: LinearProgressIndicator(
-              value: double.parse(item.totalProgress),
+              value: double.parse(item.totalProgress)/100,
               color: item.color,
               backgroundColor: const Color.fromARGB(255, 201, 201, 201),
               semanticsLabel: 'Linear progress indicator',

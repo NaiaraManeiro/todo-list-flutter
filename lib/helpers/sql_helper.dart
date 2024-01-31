@@ -239,7 +239,7 @@ class SQLHelper {
   }
 
   //Update category progress
-  static Future<void> updateCategoryProgress(String email, String nameCategory) async {
+  static Future<int> updateCategoryProgress(String email, String nameCategory) async {
     final db = await SQLHelper.db();
 
     int progress = 0;
@@ -251,11 +251,15 @@ class SQLHelper {
         progress = progress + int.parse(task['progress']);
       }
 
+      progress = (progress/tasks.length).round();
+
       Map<String, dynamic> values = {
-        "totalProgress": (progress/tasks.length).round(),
+        "totalProgress": progress,
       };
 
       await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
     });
+
+    return progress;
   }
 }
