@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../helpers/helpers.dart';
 import '../assets/constants.dart' as constants;
 import '../pages/pages.dart';
+import '../utils/utils.dart';
 
 class DrawerItem {
   String title;
@@ -19,6 +20,7 @@ class CustomDrawer {
   static _onTapDrawer(int itemPos, BuildContext context, String language){
     switch(itemPos) {
       case 0:
+        EncryptUtil.instance.reset();
         Navigator.pushReplacementNamed(context, LoginPage.routeName);
         break;
       case 1:
@@ -71,6 +73,8 @@ class CustomDrawer {
       backgroundColor: Colors.white,
       child: Column(
         children: <Widget>[
+          const FlutterLogo(size: 150),
+          const Divider(),
           Column(children: drawerOptions)
         ],
       ),

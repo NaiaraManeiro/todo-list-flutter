@@ -23,6 +23,9 @@ class EncryptUtil{
     return _instance!;
   }
 
+  void reset() {
+    _encrypter = _initializeEncrypter();
+  }
 
   String encrypt(String value) {
     if(value.isEmpty) return"";

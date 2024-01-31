@@ -84,7 +84,7 @@ class RegisterLogic{
       ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.userExists, _provider.context);
       return;
     } else {
-      final encryptPassword = EncryptUtil().encrypt(_provider.password);
+      final encryptPassword = EncryptUtil.instance.encrypt(_provider.password);
 
     //register new user
     final id = await SQLHelper.insertNewUser(words, _provider.email, _provider.username, encryptPassword);
@@ -93,7 +93,7 @@ class RegisterLogic{
       //register fail
       ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.dialogRegisterFailText, _provider.context);
     } else {
-      Get.snackbar("Successful registration", words.dialogRegisterOkText, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+      Get.snackbar(words.dialogRegisterOkText, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
       Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);
     }
 

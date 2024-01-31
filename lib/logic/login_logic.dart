@@ -54,13 +54,13 @@ class LoginLogic{
       ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.userNoExists, words.singUp, _provider.context, () => Navigator.pushReplacementNamed(_provider.context, RegisterPage.routeName));
     } else {
       //Check if the password is correct
-      final savedPass = EncryptUtil().decrypt(user.password);
+      final savedPass = EncryptUtil.instance.decrypt(user.password);
       if (savedPass != password) {
         ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.incorrectPass, _provider.context);
         return;
       } else {
         SharedPrefHelper.setString(constants.email, email);
-        Get.snackbar("Successful registration", words.dialogRegisterOkText, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+        Get.snackbar(words.loginOk, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
         Navigator.pushReplacementNamed(_provider.context, MainPage.routeName);
       }
     }
