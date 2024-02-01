@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/models.dart';
 import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
 import '../pages.dart';

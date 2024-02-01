@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../model/models.dart';
 import 'helpers.dart';
@@ -98,6 +97,16 @@ class SQLHelper {
     return null;
   }
 
+  //Get the name of the user
+  static Future<String> getUserName(String email) async {
+    final db = await SQLHelper.db();
+    List<Map<String, dynamic>> user = await db.query('users', where: "email = ?", whereArgs: [email], limit: 1);
+    if(user.isNotEmpty) {
+      return user[0]["username"];
+    }
+    return "";
+  }
+
   //Get users categories for the carrousel
   static Future<List<CardItem>?> getUserCategories(BuildContext context, String email) async {
     AppLocalizations words = AppLocalizations.of(context)!;
@@ -122,7 +131,8 @@ class SQLHelper {
             DateTime latestDate = DateTime(1890);
 
             for (Map<String, dynamic> note in notes) {
-              percentage = percentage + int.parse(note['progress']);
+              int progress = note["progress"];
+              percentage = percentage + progress;
 
               List<String> ini = note['dateIni'].split('-');    
               DateTime dateIni = DateTime(int.parse(ini[2]), int.parse(ini[1]), int.parse(ini[0]));
@@ -164,7 +174,7 @@ class SQLHelper {
               category['name'], tareas, percentage == 0 ? 0 : percentage~/countTareas, dias));
           } else {
             categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-              category['name'], "0 ${words.tasks}", int.parse(category['totalProgress']), category['totalTime']));
+              category['name'], "0 ${words.tasks}", category['totalProgress'], category['totalTime']));
           }
         }
         return categories;
@@ -173,7 +183,7 @@ class SQLHelper {
     });
   }
 
-  //Get users categories
+  //Get categories
   static Future<List<CardItem>?> getCategories(String email) async {
     final db = await SQLHelper.db();
     List<CardItem> categories = [];
@@ -182,7 +192,7 @@ class SQLHelper {
     if(categoriesU.isNotEmpty) {
       for (Map<String, dynamic> category in categoriesU) {
         categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-          category['name'], "0", int.parse(category['totalProgress']), category['totalTime']));
+          category['name'], "0", category['totalProgress'], category['totalTime']));
       }
       return categories;
     }
@@ -235,7 +245,7 @@ class SQLHelper {
     List<Map<String, dynamic>> tasksC = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
 
     for (Map<String, dynamic> tc in tasksC) {
-      tasks.add(TaskModel(id: tc['id'], name: tc['name'], dateIni: tc['dateIni'], dateFin: tc['dateFin'], progress: int.parse(tc['progress'])));
+      tasks.add(TaskModel(id: tc['id'], name: tc['name'], dateIni: tc['dateIni'], dateFin: tc['dateFin'], progress: tc['progress']));
     }
 
     return tasks;

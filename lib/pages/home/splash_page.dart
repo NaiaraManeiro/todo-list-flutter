@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../utils/utils.dart';
 import '../pages.dart';
 
 class SplashPage extends StatefulWidget {
@@ -30,7 +31,6 @@ class __SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      // You can customize the splash screen UI here
       body: Center(
         child: FlutterLogo(size: 200),
       ),

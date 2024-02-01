@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../logic/logics.dart';
@@ -10,6 +9,7 @@ class MainPageProvider extends ChangeNotifier {
   List<CardItem>? userCategories = [];
   List<CardItem>? categories = [];
   late CardItem selectedCategory;
+  String? logUser;
 
   MainPageProvider(){
     logic = MainPageLogic(this);
@@ -20,6 +20,8 @@ class MainPageProvider extends ChangeNotifier {
 
     userCategories = await logic.getUserCategories(context);
     categories = await logic.getCategories();
+    logUser = await logic.getUserName();
+    
     refresh();
   }
 

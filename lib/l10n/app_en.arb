@@ -19,6 +19,9 @@
     "notUserBiometry": "Log in before using biometry.",
 
     "mainTitle": "Todo List",
+    "mainHello": "Hello {name}!",
+    "mainNoCategories": "Your list of task is empty, try to create a new one.",
+    "mainYesCategories": "This is your todo-list.",
 
     "logOut": "Log Out",
     "language": "Language",

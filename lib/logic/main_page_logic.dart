@@ -35,6 +35,11 @@ class MainPageLogic {
     return await SQLHelper.getCategories(email);
   }
 
+  Future<String> getUserName() async{
+    final email = await SharedPrefHelper.getString(constants.email);
+    return await SQLHelper.getUserName(email);
+  }
+
   void deleteCategories(String nameCategory) async {
     AppLocalizations words = AppLocalizations.of(_provider.context)!;
     final email = await SharedPrefHelper.getString(constants.email);

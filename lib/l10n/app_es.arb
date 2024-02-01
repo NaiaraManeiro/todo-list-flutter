@@ -19,6 +19,9 @@
     "notUserBiometry": "Inicie sesión antes de usar la biometría.",
 
     "mainTitle": "Todo List",
+    "mainHello": "¡Hola {name}!",
+    "mainNoCategories": "Tu lista de tareas está vacía, intenta crear una nueva.",
+    "mainYesCategories": "Esta es tu lista de tareas.",
     
     "logOut": "Cerrar sesión",
     "language": "Idioma",
