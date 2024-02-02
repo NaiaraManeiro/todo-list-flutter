@@ -107,6 +107,16 @@ class SQLHelper {
     return "";
   }
 
+  static Future<int> changePass(String email, String newPass) async {
+    final db = await SQLHelper.db();
+
+    Map<String, dynamic> values = {
+      "password": newPass,
+    };
+
+    return await db.update('users', values, where: "email = ?", whereArgs: [email]);
+  }
+
   //Get users categories for the carrousel
   static Future<List<CardItem>?> getUserCategories(BuildContext context, String email) async {
     AppLocalizations words = AppLocalizations.of(context)!;

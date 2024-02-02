@@ -1,21 +1,30 @@
 { 
     "singUp": "Registrarse",
     "singIn": "Iniciar sesión",
+    "forgetPass": "Cambiar Contraseña",
     "email": "Correo electrónico",
     "username": "Nombre de usuario",
     "password": "Contraseña",
+    "newPassword": "Nueva contraseña",
     "confirmPass": "Confirmar contraseña",
+    "verifyCode": "Código de verificación",
+    "btnVerifyCode": "Obtener código",
     "noAccount": "¿No tienes cuenta? Registrate aquí!",
+    "forget": "Olvidada",
 
     "badEmail": "El campo Correo electrónico tiene un formato incorrecto.",
     "badUsername": "¡El nombre de usuario tiene que tener entre 5 y 20 caracteres y un número!",
     "badPassword": "¡La contraseña tiene que tener entre 8 y 20 caracteres, una mayúscula y una minúscula, un número y una caracter especial!",
     "passwordsNotMatch": "Las contraseñas no coinciden.",
+    "badCode": "El campo Código de verificación tiene que tener 6 números.",
+    "incorrectCode": "El código metido no coincide con el mandado.",
     "incorrectInputs": "Por favor, compruebe los campos.",
     "userExists": "El email ya existe, por favor pruebe con otro.",
     "userNoExists": "El email no existe, quieres registrarlo?",
+    "emailNoExists": "El email no existe, por favor, prueba de nuevo.",
     "incorrectPass": "La contraseña es incorrecta, pruebe de nuevo.",
     "loginOk": "¡Inicio de sesión exitoso!",
+    "changePassOk": "¡Cambio de contraseña exitoso!",
     "notUserBiometry": "Inicie sesión antes de usar la biometría.",
 
     "mainTitle": "Todo List",
@@ -55,5 +64,8 @@
     "dialogDeleteCategoryText": "¿Estás seguro que quieres eliminar la categoría?",
     "dialogWrongDateText": "La fecha final no puede ser antes que la fecha de inicio.",
     "dialogDeleteTaskText": "¿Estás seguro que quieres eliminar la tarea?",
-    "dialogDeleteTaskButtonOk": "Eliminar"
+    "dialogDeleteTaskButtonOk": "Eliminar",
+
+    "codeTitle": "Código de verificación",
+    "codeText": "El código de verificación es: {code}."
 }

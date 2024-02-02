@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InputDecorations {
-  static InputDecoration authInputDecoration({
-    required String labelText,
-    IconData? prefixIcon
-  }) {
+  static InputDecoration authInputDecoration({required String labelText, IconData? prefixIcon, Widget? suffixIcon}) {
     return InputDecoration(
       enabledBorder: const UnderlineInputBorder(
         borderSide: BorderSide(
@@ -22,7 +19,8 @@ class InputDecorations {
         color: Colors.grey
       ),
       prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Colors.black,) : null,
-      errorMaxLines: 3
+      errorMaxLines: 3,
+      suffixIcon: suffixIcon 
     );
   }
 }

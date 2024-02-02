@@ -22,6 +22,7 @@ class AppState extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (_) => RegisterProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => LoginProvider(), lazy: false,),
+          ChangeNotifierProvider(create: (_) => ForgotPassProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => MainPageProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => CategoryProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => TaskProvider(), lazy: false,),
@@ -75,9 +76,10 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: SplashPage.routeName,
       routes: {
+        SplashPage.routeName: (_) => const SplashPage(),
         RegisterPage.routeName: (_) => const RegisterPage(),
         LoginPage.routeName: (_) => const LoginPage(),
-        SplashPage.routeName: (_) => const SplashPage(),
+        ForgotPassPage.routeName: (_) => const ForgotPassPage(),
         MainPage.routeName: (_) => const MainPage(),
         NewTaskPage.routeName: (_) => const NewTaskPage(),
         InfoCategoryPage.routeName: (_) => const InfoCategoryPage(),

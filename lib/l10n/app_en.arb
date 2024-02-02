@@ -1,21 +1,30 @@
 { 
     "singUp": "Sing Up",
     "singIn": "Sing In",
+    "forgetPass": "Change Password",
     "email": "Email",
     "username": "Username",
     "password": "Password",
+    "newPassword": "New password",
     "confirmPass": "Confirm password",
+    "verifyCode": "Verify code",
+    "btnVerifyCode": "Get Verify Code",
     "noAccount": "Do you not have an account? Register here!",
+    "forget": "Forget",
 
     "badEmail": "Field Email has an incorrect format.",
     "badUsername": "The username has to have between 5 and 20 characters and a number!",
     "badPassword": "The password has to have between 8 and 20 characters, one uppercase and one lower case, a number and a special character!",
     "passwordsNotMatch": "The passwords don't match.",
+    "badCode": "Field Verify code has to have 6 numbers.",
+    "incorrectCode": "The inserted code does not match with the sended one.",
     "incorrectInputs": "Please check your input content.",
     "userExists": "The email already exists, please try with another one.",
     "userNoExists": "The email doesn't exists, do you want to register it?",
+    "emailNoExists": "The email doesn't exists, please try again.",
     "incorrectPass": "The password is incorrect, try again.",
     "loginOk": "Successful login!",
+    "changePassOk": "Successfully changed the password!",
     "notUserBiometry": "Log in before using biometry.",
 
     "mainTitle": "Todo List",
@@ -55,5 +64,8 @@
     "dialogDeleteCategoryText": "Are you sure you want to delete the category?",
     "dialogWrongDateText": "The end date can't be sooner than the start day.",
     "dialogDeleteTaskText": "Are you sure you want to delete the task?",
-    "dialogDeleteTaskButtonOk": "Delete"
+    "dialogDeleteTaskButtonOk": "Delete",
+
+    "codeTitle": "Verification Code",
+    "codeText": "The verification code is: {code}."
 }

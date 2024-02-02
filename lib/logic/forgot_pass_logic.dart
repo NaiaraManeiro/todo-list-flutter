@@ -1,4 +1,7 @@
 
+import 'dart:math';
+
+import 'package:email_sender/email_sender.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
@@ -10,11 +13,11 @@ import '../providers/providers.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
 
-class RegisterLogic{
+class ForgotPassLogic{
 
-  final RegisterProvider _provider;
+  final ForgotPassProvider _provider;
 
-  RegisterLogic(this._provider);
+  ForgotPassLogic(this._provider);
 
 
   String? validateEmail(AppLocalizations words, String? email) {
@@ -31,15 +34,17 @@ class RegisterLogic{
     }
   }
 
-  String? validateUsername(AppLocalizations words, String? username) {
-    _provider.isUserNameOk = false;
-    String pattern = r'^(?=.*[0-9])(?=.*[a-z-A-Z]).{5,20}$';
+  String? validateCode(AppLocalizations words, String? code) {
+    _provider.isCodeOk = false;
+    String pattern = r'^[0-9]{6}$';
     RegExp regExp  = RegExp(pattern);
     
-    if (!regExp.hasMatch(username ?? '')) {
-      return words.badUsername;
+    if (!regExp.hasMatch(code ?? '')) {
+      return words.badCode;
+    } else if (code != _provider.sendCode.toString()){
+      return words.incorrectCode;
     } else {
-      _provider.isUserNameOk = true;
+      _provider.isCodeOk = true;
       _provider.refresh();
       return null;
     }
@@ -71,32 +76,31 @@ class RegisterLogic{
   }
 
   void onSubmit(AppLocalizations words) async {
-    if (!_provider.isEmailOk || !_provider.isUserNameOk || !_provider.isPasswordOk || !_provider.isRePasswordOk) {
+    if (!_provider.isEmailOk || !_provider.isCodeOk || !_provider.isPasswordOk || !_provider.isRePasswordOk) {
       ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.incorrectInputs, _provider.context);
       return;
     }
 
-    //First check if the user already exists
+    final encryptPassword = EncryptUtil.instance.encrypt(_provider.password);
+
+    int i = await SQLHelper.changePass(_provider.email, encryptPassword);
+    if (i > 0) Get.snackbar(words.changePassOk, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+    Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);
+  }
+
+  Future<void> sendCode(AppLocalizations words) async {
+    //First check if the email already exists
     UserModel? user = await SQLHelper.checkUserExists(_provider.email);
 
-    if (user != null) {
-      //the user already exists (the email is already saved)
-      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.userExists, _provider.context);
-      return;
+    if (user == null) {
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.emailNoExists, _provider.context);
     } else {
-      final encryptPassword = EncryptUtil.instance.encrypt(_provider.password);
-
-      //register new user
-      final id = await SQLHelper.insertNewUser(words, _provider.email, _provider.username, encryptPassword);
-
-      if (id == -1) {
-        //register fail
-        ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.dialogRegisterFailText, _provider.context);
-      } else {
-        Get.snackbar(words.dialogRegisterOkText, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
-        Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);
-      }
-
+      Random random = Random();
+      // Generate a random number between 100000 and 999999 (6 digits)
+      _provider.sendCode = random.nextInt(900000) + 100000;
+      EmailSender emailsender = EmailSender();
+      var response = await emailsender.sendOtp(_provider.email, _provider.sendCode!);
+      print("Email send $response");
     }
   }
 }

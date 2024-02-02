@@ -61,12 +61,12 @@ class LoginLogic{
       } else {
         SharedPrefHelper.setString(constants.email, email);
         Get.snackbar(words.loginOk, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
-        Navigator.pushReplacementNamed(_provider.context, MainPage.routeName);
+        navigateTo(MainPage.routeName);
       }
     }
   }
 
-  void navigateToRegister() {
-    Navigator.pushReplacementNamed(_provider.context, RegisterPage.routeName);
+  void navigateTo(String route) {
+    Navigator.pushReplacementNamed(_provider.context, route);
   }
 }

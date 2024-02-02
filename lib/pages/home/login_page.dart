@@ -7,6 +7,7 @@ import '../../helpers/helpers.dart';
 import '../../providers/providers.dart';
 import '../../ui/uis.dart';
 import '../../assets/constants.dart' as constants;
+import '../pages.dart';
 
 class LoginPage extends StatefulWidget {
   static String routeName = "login";
@@ -78,16 +79,21 @@ class __LoginPageState extends State<LoginPage> {
                 child: TextFormField(
                   autocorrect: false,
                   obscureText: true,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.password, prefixIcon: Icons.lock_outline),
+                  decoration: InputDecorations.authInputDecoration(labelText: words.password, prefixIcon: Icons.lock_outline,
+                    suffixIcon: TextButton(
+                      onPressed: () => loginForm.logic.navigateTo(ForgotPassPage.routeName),
+                      child: Text(words.forget),
+                    )
+                  ),
                   onChanged: (value) => loginForm.password = value,
-                  focusNode: loginForm.passwordFocusNode..addListener((){
-                    if(!loginForm.passwordFocusNode.hasFocus){
-                     loginForm.passwordKey.currentState?.validate();
-                    }
+                    focusNode: loginForm.passwordFocusNode..addListener((){
+                      if(!loginForm.passwordFocusNode.hasFocus){
+                        loginForm.passwordKey.currentState?.validate();
+                      }
                   }),
                   validator: (value) => loginForm.logic.validatePassword(words, value),
                   maxLength: 20,
-                ),
+                )
               ),
               OutlinedButton(
                 child: Text(words.singIn),
@@ -97,7 +103,7 @@ class __LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 child: Text(words.noAccount),
-                onPressed:() => loginForm.logic.navigateToRegister(),
+                onPressed:() => loginForm.logic.navigateTo(RegisterPage.routeName),
               ),
               const SizedBox(height: 15,),
               InkWell(
