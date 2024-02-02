@@ -120,18 +120,11 @@ class RegisterLogic{
   }
 
   Future<void> sendCode(AppLocalizations words) async {
-    //First check if the email already exists
-    UserModel? user = await SQLHelper.checkUserExists(_provider.email);
-
-    if (user == null) {
-      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.emailNoExists, _provider.context);
-    } else {
-      Random random = Random();
-      // Generate a random number between 100000 and 999999 (6 digits)
-      _provider.code = random.nextInt(900000) + 100000;
-      EmailSender emailsender = EmailSender();
-      var response = await emailsender.sendOtp(_provider.email, _provider.code!);
-      print("Email send $response");
-    }
+    Random random = Random();
+    // Generate a random number between 100000 and 999999 (6 digits)
+    _provider.code = random.nextInt(900000) + 100000;
+    EmailSender emailsender = EmailSender();
+    var response = await emailsender.sendOtp(_provider.email, _provider.code!);
+    print("Email send $response");
   }
 }

@@ -9,15 +9,22 @@ class LoginProvider extends ChangeNotifier {
 
   String email = '';
   String password = '';
+  String pin = '';
 
   bool isEmailOk = false;
   bool isPasswordOk = false;
+  bool isPinOk = false;
 
   final emailKey = GlobalKey<FormState>();
   final passwordKey = GlobalKey<FormState>();
+  final pinKey = GlobalKey<FormState>();
 
   final emailFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
+  final pinFocusNode = FocusNode();
+
+  String? generatedPin;
+  int tries = 0;
 
   LoginProvider(){
     logic = LoginLogic(this);
@@ -37,6 +44,7 @@ class LoginProvider extends ChangeNotifier {
   void disposeNode(){
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
+    pinFocusNode.dispose();
   }
 
   void refresh(){

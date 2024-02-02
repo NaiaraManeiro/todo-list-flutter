@@ -6,11 +6,13 @@ import 'package:todo_list_flutter/helpers/helpers.dart';
 import '../model/models.dart';
 import '../pages/pages.dart';
 import '../providers/providers.dart';
+import '../services/services.dart';
+import '../ui/uis.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
 import '../assets/constants.dart' as constants;
 
-class LoginLogic{
+class LoginLogic {
 
   final LoginProvider _provider;
 
@@ -45,6 +47,21 @@ class LoginLogic{
     }
   }
 
+  String? validatePin(AppLocalizations words, String? value, BuildContext contextDialog) {
+    String pattern = r'^[0-9]{6}$';
+    RegExp regExp  = RegExp(pattern);
+
+    _provider.isPinOk = false;
+    if (!regExp.hasMatch(value ?? '')) {
+      return words.badCode;
+    } else if (_provider.generatedPin != value) {
+      return words.wrongPin;
+    } else {
+      _provider.isPinOk = true;
+      return null;
+    }
+  }
+
   void signIn(AppLocalizations words, String email, String password) async {
     //Check if the user exist
     UserModel? user = await SQLHelper.checkUserExists(email);
@@ -59,11 +76,68 @@ class LoginLogic{
         ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.incorrectPass, _provider.context);
         return;
       } else {
+        loginOTP(words);
         SharedPrefHelper.setString(constants.email, email);
-        Get.snackbar(words.loginOk, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
-        navigateTo(MainPage.routeName);
       }
     }
+  }
+
+  void loginOTP(AppLocalizations words) {
+    NotificationService().init().then((value) => _provider.generatedPin = value);
+
+    showDialog(context: _provider.context, builder: (BuildContext contextDialog) { 
+      return AlertDialog(
+        title: Text(words.pinTitle, textAlign: TextAlign.center),        
+        content: Wrap(
+          children: [ 
+            Column(
+              children: [
+                const SizedBox(height: 5,),
+                Text(words.pinText, textAlign: TextAlign.center),
+                const SizedBox(height: 5,),
+                Form(
+                  key: _provider.pinKey,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    validator: (value) => validatePin(words, value, contextDialog),
+                    onChanged: (value) {
+                      _provider.pinKey.currentState?.validate();
+                      _provider.pin = value;
+                    },
+                    decoration: InputDecorations.authInputDecoration(labelText: words.etPin, prefixIcon: Icons.pin),
+                  ),
+                ),
+              ],
+            )
+          ]
+        ),
+        actions: [
+          TextButton(                     
+            onPressed: () {
+             if (_provider.pin == _provider.generatedPin){
+              Get.snackbar(words.loginOk, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+              navigateTo(MainPage.routeName);
+             } else {
+                _provider.tries++;
+                if (_provider.tries == 3) {
+                  _provider.tries = 0;
+                  Navigator.of(contextDialog).pop();  
+                  Get.snackbar("Error", words.toMuchTries, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+                }
+             }
+            },     
+            child: Text(words.dialogButtonAccept),
+          ),
+          TextButton(                     
+            onPressed: () => {
+              _provider.tries = 0,
+              Navigator.of(contextDialog).pop(),  
+            },   
+            child: Text(words.dialogButtonCancel),
+          ),
+        ],
+      );}
+    );
   }
 
   void navigateTo(String route) {

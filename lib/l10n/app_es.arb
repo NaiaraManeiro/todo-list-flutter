@@ -61,11 +61,18 @@
     "dialogChangeLangText": "¿Quieres cambiar el idioma a {language}?",
     "dialogChangeLangButtonOk": "Cambiar",
     "dialogButtonCancel": "Cancelar",
+    "dialogButtonAccept": "Aceptar",
     "dialogDeleteCategoryText": "¿Estás seguro que quieres eliminar la categoría?",
     "dialogWrongDateText": "La fecha final no puede ser antes que la fecha de inicio.",
     "dialogDeleteTaskText": "¿Estás seguro que quieres eliminar la tarea?",
     "dialogDeleteTaskButtonOk": "Eliminar",
 
     "codeTitle": "Código de verificación",
-    "codeText": "El código de verificación es: {code}."
+    "codeText": "El código de verificación es: {code}.",
+
+    "pinTitle": "Pin para inicio de sesión",
+    "pinText": "Escribe el pin dado en la notificación:",
+    "etPin": "Pin",
+    "toMuchTries": "Has alcanzado el número máximo de intentos.",
+    "wrongPin": "El pin es incorrecto, prueba otra vez."
 }
