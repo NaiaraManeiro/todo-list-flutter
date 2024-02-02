@@ -10,21 +10,25 @@ class RegisterProvider extends ChangeNotifier {
   String username = '';
   String password = '';
   String confirmPassword = '';
+  int code = 0;
 
   bool isUserNameOk = false;
   bool isEmailOk = false;
   bool isPasswordOk = false;
   bool isRePasswordOk = false;
+  bool isCodeOk = false;
 
   final emailKey = GlobalKey<FormState>();
   final userNameKey = GlobalKey<FormState>();
   final passwordKey = GlobalKey<FormState>();
   final rePasswordKey = GlobalKey<FormState>();
+  final codeKey = GlobalKey<FormState>();
 
   final emailFocusNode = FocusNode();
   final userNameFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final rePasswordFocusNode = FocusNode();
+  final codeFocusNode = FocusNode();
 
   RegisterProvider(){
     logic = RegisterLogic(this);
@@ -45,6 +49,7 @@ class RegisterProvider extends ChangeNotifier {
     userNameFocusNode.dispose();
     passwordFocusNode.dispose();
     rePasswordFocusNode.dispose();
+    codeFocusNode.dispose();
   }
 
   void refresh(){

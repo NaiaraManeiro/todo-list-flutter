@@ -1,4 +1,7 @@
 
+import 'dart:math';
+
+import 'package:email_sender/email_sender.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
@@ -70,6 +73,22 @@ class RegisterLogic{
     }
   }
 
+  String? validateCode(AppLocalizations words, String? code) {
+    _provider.isCodeOk = false;
+    String pattern = r'^[0-9]{6}$';
+    RegExp regExp  = RegExp(pattern);
+    
+    if (!regExp.hasMatch(code ?? '')) {
+      return words.badCode;
+    } else if (code != _provider.code.toString()){
+      return words.incorrectCode;
+    } else {
+      _provider.isCodeOk = true;
+      _provider.refresh();
+      return null;
+    }
+  }
+
   void onSubmit(AppLocalizations words) async {
     if (!_provider.isEmailOk || !_provider.isUserNameOk || !_provider.isPasswordOk || !_provider.isRePasswordOk) {
       ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.incorrectInputs, _provider.context);
@@ -97,6 +116,22 @@ class RegisterLogic{
         Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);
       }
 
+    }
+  }
+
+  Future<void> sendCode(AppLocalizations words) async {
+    //First check if the email already exists
+    UserModel? user = await SQLHelper.checkUserExists(_provider.email);
+
+    if (user == null) {
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.emailNoExists, _provider.context);
+    } else {
+      Random random = Random();
+      // Generate a random number between 100000 and 999999 (6 digits)
+      _provider.code = random.nextInt(900000) + 100000;
+      EmailSender emailsender = EmailSender();
+      var response = await emailsender.sendOtp(_provider.email, _provider.code!);
+      print("Email send $response");
     }
   }
 }

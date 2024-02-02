@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -104,6 +105,30 @@ class __RegisterPageState extends State<RegisterPage> {
                   validator: (value) => registerForm.logic.validateConfirmationPass(words, registerForm.password, value),
                   maxLength: 20,
                 ),
+              ),
+              Form(
+                key: registerForm.codeKey,
+                child: TextFormField(
+                  autocorrect: false,
+                  decoration: InputDecorations.authInputDecoration(labelText: words.verifyCode, prefixIcon: Icons.message_outlined, 
+                    suffixIcon: TextButton(
+                      onPressed: () => registerForm.logic.sendCode(words),
+                      child: Text(words.btnVerifyCode),
+                   )
+                  ),
+                  onChanged: (value) => registerForm.code = int.parse(value),
+                    focusNode: registerForm.codeFocusNode..addListener((){
+                      if(!registerForm.codeFocusNode.hasFocus){
+                        registerForm.codeKey.currentState?.validate();
+                      }
+                  }),
+                  validator: (value) => registerForm.logic.validateCode(words, value),
+                  maxLength: 6,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                )
               ),
             ],
           )
