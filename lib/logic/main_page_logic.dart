@@ -40,17 +40,30 @@ class MainPageLogic {
     return await SQLHelper.getUserName(email);
   }
 
-  void deleteCategories(String nameCategory) async {
+  void deleteCategory(String nameCategory) async {
     AppLocalizations words = AppLocalizations.of(_provider.context)!;
     final email = await SharedPrefHelper.getString(constants.email);
 
     ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.dialogDeleteCategoryText, words.deleteCategory, _provider.context, 
       () async {
-        await SQLHelper.deleteUserCategory(email, nameCategory).then((_) {
-          Navigator.of(_provider.context).pop();
-          _provider.userCategories!.removeWhere((element) => element.nameCategory == nameCategory);
-          _provider.refresh();
-        });
+        await SQLHelper.deleteUserCategory(email, nameCategory, "category");
+        Navigator.of(_provider.context).pop();
+        _provider.userCategories!.removeWhere((element) => element.nameCategory == nameCategory);
+        _provider.categories!.removeWhere((element) => element.nameCategory == nameCategory);
+        _provider.refresh();
+      });
+  }
+
+  void deleteAllTasksCategory(String nameCategory) async {
+    AppLocalizations words = AppLocalizations.of(_provider.context)!;
+    final email = await SharedPrefHelper.getString(constants.email);
+
+    ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.dialogDeleteCategoryText, words.deleteCategory, _provider.context, 
+      () async {
+        await SQLHelper.deleteUserCategory(email, nameCategory, "tasks");
+        Navigator.of(_provider.context).pop();
+        _provider.userCategories!.removeWhere((element) => element.nameCategory == nameCategory);
+        _provider.refresh();
       });
   }
 

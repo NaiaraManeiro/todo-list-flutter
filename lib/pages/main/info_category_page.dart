@@ -46,7 +46,9 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
         actions: <Widget>[
           CardsMenu(iconColor: mainProvider.selectedCategory.color, 
             onEdit: () async { mainProvider.logic.editCategories(mainProvider.selectedCategory); }, 
-            onDelete: () async { mainProvider.logic.deleteCategories(mainProvider.selectedCategory.nameCategory); })
+            onDeleteTasks: () async { mainProvider.logic.deleteAllTasksCategory(mainProvider.selectedCategory.nameCategory); }, 
+            onDeleteCategory: () async { mainProvider.logic.deleteCategory(mainProvider.selectedCategory.nameCategory); }
+          )
         ],
       ),
       body: Padding(

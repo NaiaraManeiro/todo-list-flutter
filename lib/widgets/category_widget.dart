@@ -30,7 +30,9 @@ class CategoryWidget {
             if (show)
               CardsMenu(iconColor: item.color, 
                 onEdit: () async { mainProvider.logic.editCategories(item); }, 
-                onDelete: () async { mainProvider.logic.deleteCategories(item.nameCategory); })
+                onDeleteTasks: () async { mainProvider.logic.deleteAllTasksCategory(item.nameCategory); }, 
+                onDeleteCategory: () async { mainProvider.logic.deleteCategory(item.nameCategory); }
+              )
           ]
         ),
         const SizedBox(height: 50,),

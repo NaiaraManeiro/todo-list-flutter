@@ -3,10 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CardsMenu extends StatelessWidget {
   final Color iconColor;
-  final VoidCallback onDelete;
+  final VoidCallback onDeleteTasks;
+  final VoidCallback onDeleteCategory;
   final VoidCallback onEdit;
   
-  const CardsMenu({super.key, required this.onDelete, required this.onEdit, required this.iconColor});
+  const CardsMenu({super.key, required this.onDeleteTasks, required this.onEdit, required this.iconColor, required this.onDeleteCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +19,11 @@ class CardsMenu extends StatelessWidget {
           case "edit":
             onEdit();
             break;
-          case "delete":
-            onDelete();
+          case "deleteTasks":
+            onDeleteTasks();
+            break;
+          case "deleteCategory":
+            onDeleteCategory();
             break;
         }
       },
@@ -36,10 +40,17 @@ class CardsMenu extends StatelessWidget {
             ),
           ),
           PopupMenuItem(
-            value: "delete",
+            value: "deleteTasks",
+            child: ListTile(
+              title: Text(words.deleteTasks),
+              leading: Icon(Icons.delete, color: iconColor),
+            )
+          ),
+          PopupMenuItem(
+            value: "deleteCategory",
             child: ListTile(
               title: Text(words.deleteCategory),
-              leading: Icon(Icons.delete, color: iconColor),
+              leading: Icon(Icons.delete_forever_outlined, color: iconColor),
             )
           )
         ];
