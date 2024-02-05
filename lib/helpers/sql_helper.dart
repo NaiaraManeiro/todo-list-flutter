@@ -209,7 +209,7 @@ class SQLHelper {
     return null;
   }
 
-  //Add category to user
+  //Add category of user
   static Future<String> addCategoryUser(String email, CardItem category) async {
     final db = await SQLHelper.db();
 
@@ -226,6 +226,28 @@ class SQLHelper {
       } else {
         return "KO";
       }
+    });
+  }
+
+  //Update category of user
+  static Future<void> editCategoryUser(String email, CardItem category, String nameCategory) async {
+    final db = await SQLHelper.db();
+
+    await db.transaction((txn) async {
+
+      Map<String, dynamic> values = {
+        "name": category.nameCategory,
+        "icon": category.icon.codePoint,
+        "iconColor": category.color.value
+      };
+
+      await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+
+      Map<String, dynamic> valuesN = {
+        "category": category.nameCategory,
+      };
+
+      await txn.update('notesU', valuesN, where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
     });
   }
 

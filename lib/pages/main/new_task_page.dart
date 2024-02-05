@@ -125,9 +125,19 @@ class _NewTaskPageState extends State<NewTaskPage> {
               decoration: InputDecoration(
                 hintText: words.newTask,
                 border: InputBorder.none,
-                prefixIcon: Icon(
-                  item.icon,
-                  color: item.color,
+                prefixIcon: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, NewCategoryPage.routeName, 
+                      arguments: {
+                        'tasks': tasks,
+                        'item': item
+                      }
+                    );
+                  },
+                  child: Icon(
+                    item.icon,
+                    color: item.color,
+                  )
                 ),
                 suffixIcon: GestureDetector(
                   onTap: () => categoryProvider.logic.addNewTask(id),

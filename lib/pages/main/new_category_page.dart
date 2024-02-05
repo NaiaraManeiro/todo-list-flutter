@@ -7,6 +7,7 @@ import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/models.dart';
 import '../../providers/providers.dart';
 import '../../ui/uis.dart';
 import '../pages.dart';
@@ -22,6 +23,8 @@ class NewCategoryPage extends StatefulWidget {
 }
 
 class _NewCategoryPageState extends State<NewCategoryPage> {
+  bool data = true;
+
   void changeColor(Color color, CategoryProvider categoryProvider) {
     setState(() => categoryProvider.currentColor = color);
   }
@@ -39,18 +42,43 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
   Widget build(BuildContext context) {
     AppLocalizations words = AppLocalizations.of(context)!;
     final categoryProvider = Provider.of<CategoryProvider>(context)..setContext(context);
+
+    // Extracting arguments
+    final Map<String, dynamic>? arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final CardItem? item = arguments?['item'];
+    List<TaskModel> tasks = arguments?['tasks'].cast<TaskModel>().toList();
+
+    if (data) {
+      if (item != null) {
+        categoryProvider.logic.setData(item);
+      } else {
+        categoryProvider.logic.cleanData();
+      }
+      data = false;
+    }
+    
     
     return Scaffold(
       appBar: AppBar(
-        title: Text(words.newCategory),
+        title: Text(item != null ? words.editCategory : words.newCategory),
         leading: IconButton(
                 icon: Icon(Platform.isAndroid
                     ? Icons.arrow_back
                     : Icons.arrow_back_ios, color: Colors.black,),
-                onPressed: () => Navigator.pushReplacementNamed(context, MainPage.routeName),
+                onPressed: () => item != null 
+                    ? Navigator.pushReplacementNamed(context, NewTaskPage.routeName, 
+                        arguments: {
+                          'item': item,
+                          'tasks': tasks
+                        }
+                      )
+                    : Navigator.pushReplacementNamed(context, MainPage.routeName),
               ),
         actions: <Widget>[
-          IconButton(icon: const Icon(Icons.check), onPressed: () => categoryProvider.logic.newCategory(words))
+          IconButton(icon: const Icon(Icons.check), onPressed: () => item != null
+            ? categoryProvider.logic.updateCategory(words, item, tasks)
+            : categoryProvider.logic.newCategory(words)
+          )
         ],
       ),
       body: Container(
@@ -60,6 +88,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
             Form(
               key: categoryProvider.newCategoryKey,
               child: TextFormField(
+                controller: categoryProvider.newCategoryController,
                 autocorrect: false,
                 decoration: InputDecorations.authInputDecoration(labelText: words.newCatName, prefixIcon: Icons.category_outlined),
                 onChanged: (value) {

@@ -179,6 +179,43 @@ class CategoryLogic {
     }
   }
 
+  void updateCategory(AppLocalizations words, CardItem item, List<TaskModel> tasks) async {
+    if (!_provider.isNewCategoryOk) {
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.newCatIncorrect, _provider.context);
+      return;
+    }
+
+    final email = await SharedPrefHelper.getString(constants.email);
+    String nameCategory =  item.nameCategory;
+    
+    item.nameCategory = _provider.newCategory;
+    item.color = MaterialColorHelper.getMaterialColor(_provider.currentColor.value);
+    item.icon = _provider.selectedIcon;
+
+    await SQLHelper.editCategoryUser(email, item, nameCategory);
+
+    Navigator.pushReplacementNamed(_provider.context, NewTaskPage.routeName, 
+      arguments: {
+        'item': item,
+        'tasks': tasks
+      }
+    );
+  }
+
+  void setData(CardItem item) {
+    _provider.newCategoryController.text = item.nameCategory;
+    _provider.isNewCategoryOk = true;
+    _provider.currentColor = item.color;
+    _provider.selectedIcon = item.icon;
+  }
+
+  void cleanData() {
+    _provider.newCategoryController.text = "";
+    _provider.isNewCategoryOk = false;
+    _provider.currentColor = Colors.black;
+    _provider.selectedIcon = Icons.highlight_off_outlined;
+  }
+
   void clean() {
     _provider.canAddTaskDetail = false;
     _provider.newTaskList = [];

@@ -76,6 +76,7 @@
     "toMuchTries": "You hace reach the maximun tries.",
     "wrongPin": "The pin it's wrong, try again.",
 
+    "editCategory": "Edit Category",
     "newCategory": "New Category",
     "newCatName": "Category's name",
     "newCatIncorrect": "The name has to only have letters.",

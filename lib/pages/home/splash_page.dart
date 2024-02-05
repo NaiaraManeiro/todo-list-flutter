@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../utils/utils.dart';
 import '../pages.dart';
 
 class SplashPage extends StatefulWidget {

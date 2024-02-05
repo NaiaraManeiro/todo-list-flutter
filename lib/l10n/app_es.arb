@@ -76,6 +76,7 @@
     "toMuchTries": "Has alcanzado el número máximo de intentos.",
     "wrongPin": "El pin es incorrecto, prueba otra vez.",
 
+    "editCategory": "Editar Categoría",
     "newCategory": "Nueva Categoría",
     "newCatName": "Nombre de categoría",
     "newCatIncorrect": "El nombre solo tiene que tener letras.",

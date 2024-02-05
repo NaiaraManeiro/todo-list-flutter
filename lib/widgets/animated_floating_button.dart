@@ -76,7 +76,12 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
                     ),
                     child: IconButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, NewCategoryPage.routeName);
+                        Navigator.pushReplacementNamed(context, NewCategoryPage.routeName, 
+                      arguments: {
+                        'tasks': [],
+                        'item': null
+                      }
+                    );
                       },
                       icon: const Icon(Icons.fiber_new_outlined, size: 40.0,),
                       color: Colors.black,

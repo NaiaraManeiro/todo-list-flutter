@@ -17,6 +17,7 @@ class CategoryProvider extends ChangeNotifier {
   
   String newCategory = '';
   final newCategoryKey = GlobalKey<FormState>();
+  TextEditingController newCategoryController = TextEditingController();
   bool isNewCategoryOk = false;
   Color currentColor = Colors.black;
   IconData selectedIcon = Icons.highlight_off_outlined;
