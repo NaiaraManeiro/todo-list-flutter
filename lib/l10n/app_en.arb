@@ -74,5 +74,15 @@
     "pinText": "Put the pin given in the notification:",
     "etPin": "Pin",
     "toMuchTries": "You hace reach the maximun tries.",
-    "wrongPin": "The pin it's wrong, try again."
+    "wrongPin": "The pin it's wrong, try again.",
+
+    "newCategory": "New Category",
+    "newCatName": "Category's name",
+    "newCatIncorrect": "The name has to only have letters.",
+    "categoryExists": "The name of the category is already in use, try another one.",
+    "newCatCreated": "The new category has been created succeddfully!",
+    "iconCategory": "Category's icon",
+    "pickIcon": "Pick an icon",
+    "colorCategory": "Category's color",
+    "pickColor": "Pick a color"
 }

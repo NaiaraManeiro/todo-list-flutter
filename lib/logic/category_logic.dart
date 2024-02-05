@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../helpers/helpers.dart';
@@ -143,6 +144,39 @@ class CategoryLogic {
   void deleteTask(int index) async {
     _provider.newTaskList.removeAt(index);
     _provider.refresh();
+  }
+
+  String? validateCategory(AppLocalizations words, String? category) {
+    _provider.isNewCategoryOk = false;
+    String pattern = r'[a-zA-Z]{1,20}';
+    RegExp regExp  = RegExp(pattern);
+
+    if (!regExp.hasMatch(category ?? '')) {
+      return words.badEmail;
+    } else {
+      _provider.isNewCategoryOk = true;
+      _provider.refresh();
+      return null;
+    }
+  }
+
+  void newCategory(AppLocalizations words) async {
+    if (!_provider.isNewCategoryOk) {
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.newCatIncorrect, _provider.context);
+      return;
+    }
+
+    final email = await SharedPrefHelper.getString(constants.email);
+    CardItem category = CardItem(_provider.selectedIcon, MaterialColorHelper.getMaterialColor(_provider.currentColor.value), _provider.newCategory, "0", 0, "0");
+
+    String error = await SQLHelper.addCategoryUser(email, category);
+
+    if (error == "KO") {
+      ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.categoryExists, _provider.context);
+    } else {
+      Get.snackbar("", words.newCatCreated, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+      Navigator.pushReplacementNamed(_provider.context, MainPage.routeName);
+    }
   }
 
   void clean() {

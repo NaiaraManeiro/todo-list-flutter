@@ -74,5 +74,15 @@
     "pinText": "Escribe el pin dado en la notificación:",
     "etPin": "Pin",
     "toMuchTries": "Has alcanzado el número máximo de intentos.",
-    "wrongPin": "El pin es incorrecto, prueba otra vez."
+    "wrongPin": "El pin es incorrecto, prueba otra vez.",
+
+    "newCategory": "Nueva Categoría",
+    "newCatName": "Nombre de categoría",
+    "newCatIncorrect": "El nombre solo tiene que tener letras.",
+    "categoryExists": "El nombre de la categoría ya está en uso, prueba con otro.",
+    "newCatCreated": "¡La nueva categoría se ha creado exitosamente!",
+    "iconCategory": "Icono de la categoría",
+    "pickIcon": "Escoge un icono",
+    "colorCategory": "Color de la categoría",
+    "pickColor": "Escoge un color"
 }

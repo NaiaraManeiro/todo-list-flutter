@@ -14,6 +14,12 @@ class CategoryProvider extends ChangeNotifier {
   late DateTime startDate;
   late DateTime finishDate;
   bool canAddTaskDetail = false;
+  
+  String newCategory = '';
+  final newCategoryKey = GlobalKey<FormState>();
+  bool isNewCategoryOk = false;
+  Color currentColor = Colors.black;
+  IconData selectedIcon = Icons.highlight_off_outlined;
 
   CategoryProvider(){
     logic = CategoryLogic(this);

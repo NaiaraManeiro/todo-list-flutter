@@ -83,6 +83,7 @@ class _MyAppState extends State<MyApp> {
         MainPage.routeName: (_) => const MainPage(),
         NewTaskPage.routeName: (_) => const NewTaskPage(),
         InfoCategoryPage.routeName: (_) => const InfoCategoryPage(),
+        NewCategoryPage.routeName: (_) => const NewCategoryPage(),
       },
     );
   }

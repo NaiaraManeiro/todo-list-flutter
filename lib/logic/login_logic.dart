@@ -115,7 +115,7 @@ class LoginLogic {
           TextButton(                     
             onPressed: () {
              if (_provider.pin == _provider.generatedPin){
-              Get.snackbar(words.loginOk, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+              Get.snackbar("",words.loginOk, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
               navigateTo(MainPage.routeName);
              } else {
                 _provider.tries++;

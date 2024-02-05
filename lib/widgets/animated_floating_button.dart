@@ -58,11 +58,31 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
           if (_showCircleList)
             Positioned(
               bottom: -150,
-              child: CircleList(
-                origin: const Offset(0, 0),
-                children: List.generate(mainProvider.categories!.length, (index) {
-                  return _buildOptionButton(mainProvider.categories!.elementAt(index), index);
-                }),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircleList(
+                    origin: const Offset(0, 0),
+                    children: List.generate(mainProvider.categories!.length, (index) {
+                      return _buildOptionButton(mainProvider.categories!.elementAt(index), index);
+                    }),
+                  ),
+                  Container(
+                    width: 60.0,
+                    height: 60.0,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color.fromARGB(255, 232, 192, 255), 
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, NewCategoryPage.routeName);
+                      },
+                      icon: const Icon(Icons.fiber_new_outlined, size: 40.0,),
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ),
         ],

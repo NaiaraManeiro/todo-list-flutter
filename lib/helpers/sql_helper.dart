@@ -209,6 +209,26 @@ class SQLHelper {
     return null;
   }
 
+  //Add category to user
+  static Future<String> addCategoryUser(String email, CardItem category) async {
+    final db = await SQLHelper.db();
+
+    return await db.transaction<String>( (txn) async {
+      //Check if the name of the category already exists
+      List<Map<String, dynamic>> categoryS = await txn.query('categoriesU', where: "emailU = ? AND name = ?", whereArgs: [email, category.nameCategory], limit: 1);
+
+      if (categoryS.isEmpty) {
+        //Insert the category
+        await txn.insert('categoriesU', {'emailU': email, 'name': category.nameCategory, 'icon': category.icon.codePoint, 'iconColor': category.color.value, 
+          'totalProgress': 0, 'totalTime': "0", 'isNew': true});
+
+        return "OK";
+      } else {
+        return "KO";
+      }
+    });
+  }
+
   //Delete category of user
   static Future<void> deleteUserCategory(String email, String nameCategory) async {
     final db = await SQLHelper.db();
