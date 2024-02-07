@@ -1,10 +1,12 @@
 import 'package:circle_list/circle_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/models.dart';
 import '../pages/pages.dart';
 import '../providers/providers.dart';
+import 'widgets.dart';
 
 class CircleListFloatingButton extends StatefulWidget {
   const CircleListFloatingButton({super.key});
@@ -30,7 +32,9 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations words = AppLocalizations.of(context)!;
     final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+    final settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
     
     return GestureDetector(
       onTap: () {
@@ -75,13 +79,21 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
                       color: Color.fromARGB(255, 232, 192, 255), 
                     ),
                     child: IconButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, NewCategoryPage.routeName, 
-                      arguments: {
-                        'tasks': [],
-                        'item': null
-                      }
-                    );
+                      onPressed: () async {
+                        int categoryMaxValue = await mainProvider.logic.getCategoryMaxValue();
+                        if (mainProvider.categories!.length == categoryMaxValue) {
+                          ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.maxCategoryText, words.settings, context, 
+                            () => Navigator.pushReplacementNamed(context, SettingsPage.routeName)
+                          );
+                        } else {
+                          Navigator.pushReplacementNamed(context, NewCategoryPage.routeName, 
+                          arguments: {
+                            'tasks': [],
+                            'item': null
+                          }
+                        );
+                        }
+                        
                       },
                       icon: const Icon(Icons.fiber_new_outlined, size: 40.0,),
                       color: Colors.black,

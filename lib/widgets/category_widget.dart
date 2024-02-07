@@ -10,6 +10,7 @@ class CategoryWidget {
 
   static Widget getCategoryWidget(BuildContext context, CardItem item, bool show) {
     final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+    final settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -31,7 +32,7 @@ class CategoryWidget {
               CardsMenu(iconColor: item.color, 
                 onEdit: () async { mainProvider.logic.editCategories(item); }, 
                 onDeleteTasks: () async { mainProvider.logic.deleteAllTasksCategory(item.nameCategory); }, 
-                onDeleteCategory: () async { mainProvider.logic.deleteCategory(item.nameCategory); }
+                onDeleteCategory: () async { mainProvider.logic.deleteCategory(item.nameCategory, settingsProvider); }
               )
           ]
         ),

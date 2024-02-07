@@ -40,18 +40,25 @@ class MainPageLogic {
     return await SQLHelper.getUserName(email);
   }
 
-  void deleteCategory(String nameCategory) async {
+  void deleteCategory(String nameCategory, SettingsProvider settingsProvider) async {
     AppLocalizations words = AppLocalizations.of(_provider.context)!;
-    final email = await SharedPrefHelper.getString(constants.email);
+    if (settingsProvider.currentMinValue == await getCategoryMinValue()) {
+      ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.minCategoryText, words.settings, _provider.context, 
+        () => Navigator.pushReplacementNamed(_provider.context, SettingsPage.routeName)
+      );
+    } else {
+      final email = await SharedPrefHelper.getString(constants.email);
 
-    ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.dialogDeleteCategoryText, words.deleteCategory, _provider.context, 
-      () async {
-        await SQLHelper.deleteUserCategory(email, nameCategory, "category");
-        Navigator.of(_provider.context).pop();
-        _provider.userCategories!.removeWhere((element) => element.nameCategory == nameCategory);
-        _provider.categories!.removeWhere((element) => element.nameCategory == nameCategory);
-        _provider.refresh();
-      });
+      ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.dialogDeleteCategoryText, words.deleteCategory, _provider.context, 
+        () async {
+          await SQLHelper.deleteUserCategory(email, nameCategory, "category");
+          Navigator.of(_provider.context).pop();
+          _provider.userCategories!.removeWhere((element) => element.nameCategory == nameCategory);
+          _provider.categories!.removeWhere((element) => element.nameCategory == nameCategory);
+          _provider.refresh();
+        }
+      );
+    }
   }
 
   void deleteAllTasksCategory(String nameCategory) async {
@@ -77,5 +84,15 @@ class MainPageLogic {
         }
       )
     );
+  }
+
+  Future<int> getCategoryMaxValue() async {
+    final email = await SharedPrefHelper.getString(constants.email);
+    return int.parse(await SQLHelper.getSettingValue(email, constants.categoryMax));
+  }
+
+  Future<int> getCategoryMinValue() async {
+    final email = await SharedPrefHelper.getString(constants.email);
+    return int.parse(await SQLHelper.getSettingValue(email, constants.categoryMin));
   }
 }

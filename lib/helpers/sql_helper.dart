@@ -359,6 +359,15 @@ class SQLHelper {
     return await db.query('settingsU', where: "emailU = ?", whereArgs: [email]);
   }
 
+  //Get value of setting
+  static Future<String> getSettingValue(String email, String settingName) async {
+    final db = await SQLHelper.db();
+
+    List<Map<String, dynamic>> setting = await db.query('settingsU', where: "emailU = ? AND setting = ?", whereArgs: [email, settingName], limit: 1);
+    return setting[0]["value"];
+  }
+
+  //Update settings for a user
   static Future<void> saveSettings(String email, List<Map<String, dynamic>> settings) async {
     final db = await SQLHelper.db();
 

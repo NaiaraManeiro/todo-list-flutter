@@ -22,6 +22,7 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
     final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
 
     final Map<String, dynamic>? arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
@@ -47,7 +48,7 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
           CardsMenu(iconColor: mainProvider.selectedCategory.color, 
             onEdit: () async { mainProvider.logic.editCategories(mainProvider.selectedCategory); }, 
             onDeleteTasks: () async { mainProvider.logic.deleteAllTasksCategory(mainProvider.selectedCategory.nameCategory); }, 
-            onDeleteCategory: () async { mainProvider.logic.deleteCategory(mainProvider.selectedCategory.nameCategory); }
+            onDeleteCategory: () async { mainProvider.logic.deleteCategory(mainProvider.selectedCategory.nameCategory, settingsProvider); }
           )
         ],
       ),

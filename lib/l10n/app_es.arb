@@ -92,5 +92,7 @@
     "settingsSaved": "La configuración ha sido actualizada.",
     "settingsCategory": "Máximo y mínimo de categorías",
     "catMax": "Máximo",
-    "catMin": "Mínimo"
+    "catMin": "Mínimo",
+    "maxCategoryText": "Has alcanzado el máximo de categorías, si quieres crear más, actualiza la configuración de categorías o elimina una categoría.",
+    "minCategoryText": "Has alcanzado el mínimo de categorías, si quieres eliminar la categoría, actualiza la configuración de categorías o crea otra categoría."
 }

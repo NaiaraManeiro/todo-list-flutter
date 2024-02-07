@@ -57,7 +57,6 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
       data = false;
     }
     
-    
     return Scaffold(
       appBar: AppBar(
         title: Text(item != null ? words.editCategory : words.newCategory),
