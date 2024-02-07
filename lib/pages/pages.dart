@@ -7,3 +7,4 @@ export './main/main_page.dart';
 export './main/new_task_page.dart';
 export './main/info_category_page.dart';
 export './main/new_category_page.dart';
+export './main/settings_page.dart';

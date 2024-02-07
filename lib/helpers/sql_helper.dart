@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/models.dart';
 import 'helpers.dart';
+import '../assets/constants.dart' as constants;
 
 class SQLHelper {
   static const _databaseName = "TodoApp.db";
@@ -42,6 +43,11 @@ class SQLHelper {
         dateFin TEXT NOT NULL,
         progress INTEGER NOT NULL,
         UNIQUE (id, emailU, category))""");
+    await database.execute("""CREATE TABLE IF NOT EXISTS settingsU(
+        emailU TEXT NOT NULL,
+        setting TEXT NOT NULL,
+        value TEXT NOT NULL,
+        PRIMARY KEY (emailU, setting))""");
   }
 
   static Future<void> cleanDatabase() async {
@@ -52,6 +58,7 @@ class SQLHelper {
         batch.delete('users');
         batch.delete('categoriesU');
         batch.delete('notesU');
+        batch.delete('settingsU');
         await batch.commit();
       });
     } catch(error){
@@ -77,6 +84,16 @@ class SQLHelper {
 
     for (var dataC in dataCList) {
       await db.insert('categoriesU', dataC,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    }
+
+    final List<Map<String, dynamic>> dataSList = [
+      {'emailU': email, 'setting': constants.categoryMax, 'value': "10"},
+      {'emailU': email, 'setting': constants.categoryMin, 'value': constants.categoryMinValue},
+    ];
+
+    for (var dataC in dataSList) {
+      await db.insert('settingsU', dataC,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     }
 
@@ -333,5 +350,23 @@ class SQLHelper {
     await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
 
     return averageProgress;
+  }
+
+  //Get settings values
+  static Future<List<Map<String, dynamic>>> getSettings(String email) async {
+    final db = await SQLHelper.db();
+
+    return await db.query('settingsU', where: "emailU = ?", whereArgs: [email]);
+  }
+
+  static Future<void> saveSettings(String email, List<Map<String, dynamic>> settings) async {
+    final db = await SQLHelper.db();
+
+    for (Map<String, dynamic> setting in settings) {
+      String settingName = setting['setting'];
+      dynamic settingValue = setting['value'];
+
+      await db.update('settingsU', {'value': settingValue}, where: "emailU = ? AND setting = ?", whereArgs: [email, settingName]);
+    }
   }
 }

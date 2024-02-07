@@ -47,7 +47,7 @@ class __RegisterPageState extends State<RegisterPage> {
                 child: TextFormField(
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.email, prefixIcon: Icons.email),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.email, prefixIcon: Icons.email),
                   onChanged: (value) => registerForm.email = value,
                   focusNode: registerForm.emailFocusNode..addListener((){
                     if(!registerForm.emailFocusNode.hasFocus){
@@ -62,7 +62,7 @@ class __RegisterPageState extends State<RegisterPage> {
                 key: registerForm.userNameKey,
                 child: TextFormField(
                   autocorrect: false,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.username, prefixIcon: Icons.person),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.username, prefixIcon: Icons.person),
                   onChanged: (value) => registerForm.username = value,
                   focusNode: registerForm.userNameFocusNode..addListener((){
                     if(!registerForm.userNameFocusNode.hasFocus){
@@ -79,7 +79,7 @@ class __RegisterPageState extends State<RegisterPage> {
                 child: TextFormField(
                   autocorrect: false,
                   obscureText: true,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.password, prefixIcon: Icons.lock_outline),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.password, prefixIcon: Icons.lock_outline),
                   onChanged: (value) => registerForm.password = value,
                   focusNode: registerForm.passwordFocusNode..addListener((){
                     if(!registerForm.passwordFocusNode.hasFocus){
@@ -95,7 +95,7 @@ class __RegisterPageState extends State<RegisterPage> {
                 child: TextFormField(
                   autocorrect: false,
                   obscureText: true,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.confirmPass, prefixIcon: Icons.lock),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.confirmPass, prefixIcon: Icons.lock),
                   onChanged: (value) => registerForm.confirmPassword = value,
                   focusNode: registerForm.rePasswordFocusNode..addListener((){
                     if(!registerForm.rePasswordFocusNode.hasFocus){
@@ -110,7 +110,7 @@ class __RegisterPageState extends State<RegisterPage> {
                 key: registerForm.codeKey,
                 child: TextFormField(
                   autocorrect: false,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.verifyCode, prefixIcon: Icons.message_outlined, 
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.verifyCode, prefixIcon: Icons.message_outlined, 
                     suffixIcon: TextButton(
                       onPressed: () => registerForm.logic.sendCode(words),
                       child: Text(words.btnVerifyCode),

@@ -82,7 +82,7 @@ class ForgotPassLogic{
     final encryptPassword = EncryptUtil.instance.encrypt(_provider.password);
 
     int i = await SQLHelper.changePass(_provider.email, encryptPassword);
-    if (i > 0) Get.snackbar(words.changePassOk, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+    if (i > 0) ShowDialogs.showSnackbar(_provider.context, words.changePassOk);
     Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);
   }
 

@@ -86,5 +86,11 @@
     "iconCategory": "Icono de la categoría",
     "pickIcon": "Escoge un icono",
     "colorCategory": "Color de la categoría",
-    "pickColor": "Escoge un color"
+    "pickColor": "Escoge un color",
+
+    "settings": "Configuración",
+    "settingsSaved": "La configuración ha sido actualizada.",
+    "settingsCategory": "Máximo y mínimo de categorías",
+    "catMax": "Máximo",
+    "catMin": "Mínimo"
 }

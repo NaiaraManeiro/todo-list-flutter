@@ -47,7 +47,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 child: TextFormField(
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.email, prefixIcon: Icons.email),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.email, prefixIcon: Icons.email),
                   onChanged: (value) => forgotPassForm.email = value,
                   focusNode: forgotPassForm.emailFocusNode..addListener((){
                     if(!forgotPassForm.emailFocusNode.hasFocus){
@@ -62,7 +62,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 key: forgotPassForm.codeKey,
                 child: TextFormField(
                   autocorrect: false,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.verifyCode, prefixIcon: Icons.message_outlined, 
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.verifyCode, prefixIcon: Icons.message_outlined, 
                     suffixIcon: TextButton(
                       onPressed: () => forgotPassForm.logic.sendCode(words),
                       child: Text(words.btnVerifyCode),
@@ -87,7 +87,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 child: TextFormField(
                   autocorrect: false,
                   obscureText: true,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.newPassword, prefixIcon: Icons.lock_outline),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.newPassword, prefixIcon: Icons.lock_outline),
                   onChanged: (value) => forgotPassForm.password = value,
                   focusNode: forgotPassForm.passwordFocusNode..addListener((){
                     if(!forgotPassForm.passwordFocusNode.hasFocus){
@@ -103,7 +103,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 child: TextFormField(
                   autocorrect: false,
                   obscureText: true,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.confirmPass, prefixIcon: Icons.lock),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.confirmPass, prefixIcon: Icons.lock),
                   onChanged: (value) => forgotPassForm.confirmPassword = value,
                   focusNode: forgotPassForm.rePasswordFocusNode..addListener((){
                     if(!forgotPassForm.rePasswordFocusNode.hasFocus){

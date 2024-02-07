@@ -90,7 +90,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
               child: TextFormField(
                 controller: categoryProvider.newCategoryController,
                 autocorrect: false,
-                decoration: InputDecorations.authInputDecoration(labelText: words.newCatName, prefixIcon: Icons.category_outlined),
+                decoration: WidgetDecorations.authInputDecoration(labelText: words.newCatName, prefixIcon: Icons.category_outlined),
                 onChanged: (value) {
                   categoryProvider.newCategoryKey.currentState?.validate();
                   categoryProvider.newCategory = value;

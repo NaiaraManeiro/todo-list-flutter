@@ -104,25 +104,25 @@ class LoginLogic {
                       _provider.pinKey.currentState?.validate();
                       _provider.pin = value;
                     },
-                    decoration: InputDecorations.authInputDecoration(labelText: words.etPin, prefixIcon: Icons.pin),
+                    decoration: WidgetDecorations.authInputDecoration(labelText: words.etPin, prefixIcon: Icons.pin),
                   ),
                 ),
               ],
             )
           ]
-        ),
+        ), 
         actions: [
           TextButton(                     
             onPressed: () {
              if (_provider.pin == _provider.generatedPin){
-              Get.snackbar("",words.loginOk, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+              ShowDialogs.showSnackbar(_provider.context, words.loginOk);
               navigateTo(MainPage.routeName);
              } else {
                 _provider.tries++;
                 if (_provider.tries == 3) {
                   _provider.tries = 0;
-                  Navigator.of(contextDialog).pop();  
-                  Get.snackbar("Error", words.toMuchTries, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+                  Navigator.of(contextDialog).pop(); 
+                  ShowDialogs.showSnackbar(_provider.context, words.toMuchTries); 
                 }
              }
             },     

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InputDecorations {
+class WidgetDecorations {
   static InputDecoration authInputDecoration({required String labelText, IconData? prefixIcon, Widget? suffixIcon}) {
     return InputDecoration(
       enabledBorder: const UnderlineInputBorder(
@@ -21,6 +21,13 @@ class InputDecorations {
       prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Colors.black,) : null,
       errorMaxLines: 3,
       suffixIcon: suffixIcon 
+    );
+  }
+
+  static BoxDecoration numberPickerDecoration() {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: Colors.black26),
     );
   }
 }

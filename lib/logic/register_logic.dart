@@ -112,7 +112,7 @@ class RegisterLogic{
         //register fail
         ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.dialogRegisterFailText, _provider.context);
       } else {
-        Get.snackbar(words.dialogRegisterOkText, "", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+        ShowDialogs.showSnackbar(_provider.context, words.dialogRegisterOkText); 
         Navigator.pushReplacementNamed(_provider.context, LoginPage.routeName);
       }
 

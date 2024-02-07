@@ -174,7 +174,7 @@ class CategoryLogic {
     if (error == "KO") {
       ShowDialogs.showNormalDialog(words.dialogAlertTitle, words.categoryExists, _provider.context);
     } else {
-      Get.snackbar("", words.newCatCreated, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black87, colorText: Colors.white);
+      ShowDialogs.showSnackbar(_provider.context, words.newCatCreated);
       Navigator.pushReplacementNamed(_provider.context, MainPage.routeName);
     }
   }

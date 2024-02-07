@@ -64,7 +64,7 @@ class __LoginPageState extends State<LoginPage> {
                 child: TextFormField(
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.email, prefixIcon: Icons.email),
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.email, prefixIcon: Icons.email),
                   onChanged: (value) => loginForm.email = value,
                   focusNode: loginForm.emailFocusNode..addListener((){
                     if(!loginForm.emailFocusNode.hasFocus){
@@ -79,7 +79,7 @@ class __LoginPageState extends State<LoginPage> {
                 child: TextFormField(
                   autocorrect: false,
                   obscureText: true,
-                  decoration: InputDecorations.authInputDecoration(labelText: words.password, prefixIcon: Icons.lock_outline,
+                  decoration: WidgetDecorations.authInputDecoration(labelText: words.password, prefixIcon: Icons.lock_outline,
                     suffixIcon: TextButton(
                       onPressed: () => loginForm.logic.navigateTo(ForgotPassPage.routeName),
                       child: Text(words.forget),
