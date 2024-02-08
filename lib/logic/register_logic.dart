@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:email_sender/email_sender.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get/get.dart';
 import 'package:todo_list_flutter/model/models.dart';
 
 import '../helpers/helpers.dart';

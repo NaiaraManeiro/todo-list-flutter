@@ -27,6 +27,9 @@ class CustomDrawer {
         _showChangeLanguage(context, language);
         break;
       case 2:
+      Navigator.pushReplacementNamed(context, CompletedTasksPage.routeName);
+        break;
+      case 3:
         Navigator.pushReplacementNamed(context, SettingsPage.routeName);
         break;
     }
@@ -35,7 +38,8 @@ class CustomDrawer {
  
   static Widget getDrawer(BuildContext context) {
     final words = AppLocalizations.of(context)!;
-    final drawerItems = [DrawerItem(words.logOut, Icons.logout), DrawerItem(words.language, Icons.language), DrawerItem(words.settings, Icons.tune_outlined)];
+    final drawerItems = [DrawerItem(words.logOut, Icons.logout), DrawerItem(words.language, Icons.language), DrawerItem(words.tasksDoneTitle, Icons.task_outlined), 
+      DrawerItem(words.settings, Icons.tune_outlined)];
     List<Widget> drawerOptions = [];
     for (var i = 0; i < drawerItems.length; i++) {
       var d = drawerItems[i];

@@ -5,3 +5,4 @@ export 'main_page_provider.dart';
 export 'category_provider.dart';
 export 'task_provider.dart';
 export 'settings_provider.dart';
+export 'completed_tasks_provider.dart';

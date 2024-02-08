@@ -27,6 +27,7 @@ class AppState extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => CategoryProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => TaskProvider(), lazy: false,),
           ChangeNotifierProvider(create: (_) => SettingsProvider(), lazy: false,),
+          ChangeNotifierProvider(create: (_) => CompletedTasksProvider(), lazy: false,),
         ],
         child: const MyApp(),
       );
@@ -86,6 +87,7 @@ class _MyAppState extends State<MyApp> {
         InfoCategoryPage.routeName: (_) => const InfoCategoryPage(),
         NewCategoryPage.routeName: (_) => const NewCategoryPage(),
         SettingsPage.routeName: (_) => const SettingsPage(),
+        CompletedTasksPage.routeName: (_) => const CompletedTasksPage(),
       },
     );
   }

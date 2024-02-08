@@ -198,10 +198,10 @@ class SQLHelper {
             }
 
             categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-              category['name'], tareas, percentage == 0 ? 0 : percentage~/countTareas, dias));
+              category['name'], tareas, percentage == 0 ? 0 : percentage~/countTareas, dias, []));
           } else {
             categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-              category['name'], "0 ${words.tasks}", category['totalProgress'], category['totalTime']));
+              category['name'], "0 ${words.tasks}", category['totalProgress'], category['totalTime'], []));
           }
         }
         return categories;
@@ -219,7 +219,7 @@ class SQLHelper {
     if(categoriesU.isNotEmpty) {
       for (Map<String, dynamic> category in categoriesU) {
         categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-          category['name'], "0", category['totalProgress'], category['totalTime']));
+          category['name'], "0", category['totalProgress'], category['totalTime'], []));
       }
       return categories;
     }
@@ -376,6 +376,37 @@ class SQLHelper {
       dynamic settingValue = setting['value'];
 
       await db.update('settingsU', {'value': settingValue}, where: "emailU = ? AND setting = ?", whereArgs: [email, settingName]);
+    }
+  }
+
+  //Get done tasks
+  static Future<List<CardItem>?> getDoneTasks(String email) async {
+    final db = await SQLHelper.db();
+
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT c.name, c.icon, c.iconColor, GROUP_CONCAT(n.name) AS noteNames, GROUP_CONCAT(n.dateIni) AS noteDateIni, GROUP_CONCAT(n.dateFin) AS noteDateFin
+      FROM categoriesU as c
+      LEFT JOIN notesU as n ON c.emailU = n.emailU AND c.name = n.category
+      WHERE c.emailU = ? AND n.progress = 100
+      GROUP BY c.emailU, c.name
+    ''', [email]);
+
+    if (result.isEmpty) {
+      return null;
+    } else {
+      final List<CardItem> cardItems = result.map((map) {
+        return CardItem(
+          IconDataHelper.getIconData(map['icon']),
+          MaterialColorHelper.getMaterialColor(map['iconColor']),
+          map['name'] as String,
+          "",
+          0,
+          "",
+          CardItem.parseTasks(map),
+        );
+      }).toList();
+
+      return cardItems;
     }
   }
 }

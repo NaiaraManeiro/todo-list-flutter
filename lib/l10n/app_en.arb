@@ -94,5 +94,10 @@
     "catMax": "Maximun",
     "catMin": "Minimun",
     "maxCategoryText": "You have reached the maximun categories, if you want to create more update the category settings or delete a category.",
-    "minCategoryText": "You have reached the minimun categories, if you want to delete the category update the category settings or create another category."
+    "minCategoryText": "You have reached the minimun categories, if you want to delete the category update the category settings or create another category.",
+
+    "tasksDoneTitle": "Doned tasks",
+    "noDoneTasks": "There aren't any doned tasks.",
+    "numDoneTasks": "{tasks} doned tasks",
+    "numDoneTask": "{tasks} doned task"
 }

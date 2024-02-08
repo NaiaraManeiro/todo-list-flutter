@@ -167,7 +167,7 @@ class CategoryLogic {
     }
 
     final email = await SharedPrefHelper.getString(constants.email);
-    CardItem category = CardItem(_provider.selectedIcon, MaterialColorHelper.getMaterialColor(_provider.currentColor.value), _provider.newCategory, "0", 0, "0");
+    CardItem category = CardItem(_provider.selectedIcon, MaterialColorHelper.getMaterialColor(_provider.currentColor.value), _provider.newCategory, "0", 0, "0", []);
 
     String error = await SQLHelper.addCategoryUser(email, category);
 
