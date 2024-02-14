@@ -9,6 +9,8 @@ class CompletedTasksProvider extends ChangeNotifier {
   late BuildContext context;
 
   List<CardItem>? doneTasks; 
+  List<CardItem>? copyList; 
+  List<bool>? selectedCategories; 
 
   CompletedTasksProvider() {
     logic = CompletedTasksLogic(this);
@@ -18,6 +20,8 @@ class CompletedTasksProvider extends ChangeNotifier {
     this.context = context;
 
     doneTasks = await logic.getDoneTasks();
+    copyList = copyList ?? doneTasks;
+    selectedCategories = selectedCategories ?? List.filled(doneTasks!.length, true);
     
     refresh();
   }

@@ -380,16 +380,26 @@ class SQLHelper {
   }
 
   //Get done tasks
-  static Future<List<CardItem>?> getDoneTasks(String email) async {
+  static Future<List<CardItem>?> getDoneTasks(String email, List<String>? categories) async {
     final db = await SQLHelper.db();
 
-    final List<Map<String, dynamic>> result = await db.rawQuery('''
+    String query = '''
       SELECT c.name, c.icon, c.iconColor, GROUP_CONCAT(n.name) AS noteNames, GROUP_CONCAT(n.dateIni) AS noteDateIni, GROUP_CONCAT(n.dateFin) AS noteDateFin
       FROM categoriesU as c
       LEFT JOIN notesU as n ON c.emailU = n.emailU AND c.name = n.category
       WHERE c.emailU = ? AND n.progress = 100
-      GROUP BY c.emailU, c.name
-    ''', [email]);
+    ''';
+
+    List<dynamic> queryParams = [email];
+
+    if (categories != null) {
+      query += ' AND c.name IN (${categories.map((_) => '?').join(', ')})';
+      queryParams.addAll(categories);
+    }
+
+    query += ' GROUP BY c.emailU, c.name';
+
+    final List<Map<String, dynamic>> result = await db.rawQuery(query, queryParams);
 
     if (result.isEmpty) {
       return null;

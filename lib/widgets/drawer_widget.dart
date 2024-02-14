@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get/get.dart';
 
-import '../helpers/helpers.dart';
-import '../assets/constants.dart' as constants;
+import '../model/models.dart';
 import '../pages/pages.dart';
 import '../utils/utils.dart';
-
-class DrawerItem {
-  String title;
-  IconData icon;
-  DrawerItem(this.title, this.icon);
-}
+import 'dialogs.dart';
  
 class CustomDrawer {
  
@@ -24,7 +17,7 @@ class CustomDrawer {
         Navigator.pushReplacementNamed(context, LoginPage.routeName);
         break;
       case 1:
-        _showChangeLanguage(context, language);
+        ShowDialogs.showChangeLanguage(context, language);
         break;
       case 2:
       Navigator.pushReplacementNamed(context, CompletedTasksPage.routeName);
@@ -33,7 +26,6 @@ class CustomDrawer {
         Navigator.pushReplacementNamed(context, SettingsPage.routeName);
         break;
     }
-
   }
  
   static Widget getDrawer(BuildContext context) {
@@ -70,9 +62,7 @@ class CustomDrawer {
           selected: i == selectedDrawerIndex,
           onTap: () => _onTapDrawer(i, context, ""),
         ));
-      
-      }
-      
+      } 
     }
  
     return Drawer(
@@ -86,48 +76,5 @@ class CustomDrawer {
         ],
       ),
     );
-  }
-
-  static _showChangeLanguage(BuildContext context, String language) {
-    final words = AppLocalizations.of(context)!;
-    Locale newLocale = const Locale('es', 'ES');
-    SharedPrefHelper.getString(constants.languageCode).then((value) => {
-      if (value != language) {
-        showDialog(context: context, builder: (BuildContext contextDialog) {
-          return AlertDialog(
-            title: Text(words.dialogChangeLangTitle),        
-            content: Wrap(
-              children: [ Column(
-                children: [
-                  const SizedBox(height: 5,),
-                  Text(language == 'es'
-                    ? words.dialogChangeLangText(words.esL)
-                    : words.dialogChangeLangText(words.enL)
-                  ),
-                ],
-              ),]
-            ),
-            actions: [
-              TextButton(                     
-                onPressed: () => {
-                  if(language == "en") {
-                    newLocale = const Locale('en', 'EN')
-                  }, 
-                  Get.updateLocale(newLocale),
-                  SharedPrefHelper.setString(constants.languageCode, newLocale.languageCode),
-                  Navigator.of(contextDialog).pop()
-                },     
-                child: Text(words.dialogChangeLangButtonOk),
-              ),
-              TextButton(                     
-                onPressed: () => Navigator.of(contextDialog).pop(),     
-                child: Text(words.dialogButtonCancel),
-              ),
-            ],
-          );
-        })           
-      }  
-    });
-    
   }
 }

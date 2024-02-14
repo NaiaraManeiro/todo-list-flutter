@@ -63,6 +63,7 @@
     "dialogChangeLangButtonOk": "Cambiar",
     "dialogButtonCancel": "Cancelar",
     "dialogButtonAccept": "Aceptar",
+    "dialogButtonApply": "Aplicar",
     "dialogDeleteCategoryText": "¿Estás seguro que quieres eliminar la categoría?",
     "dialogWrongDateText": "La fecha final no puede ser antes que la fecha de inicio.",
     "dialogDeleteTaskText": "¿Estás seguro que quieres eliminar la tarea?",
@@ -99,5 +100,9 @@
     "tasksDoneTitle": "Tareas completadas",
     "noDoneTasks": "No hay ninguna tarea completada.",
     "numDoneTasks": "{tasks} tareas completadas",
-    "numDoneTask": "{tasks} tarea completada"
+    "numDoneTask": "{tasks} tarea completada",
+    "startDateFilter": "Fecha inicio",
+    "endDateFilter": "Fecha fin",
+    "categoriesFilter": "Categorías",
+    "selectCategories": "Selecciona Categorías"
 }

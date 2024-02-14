@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../model/models.dart';
 import '../../providers/providers.dart';
+import '../../widgets/widgets.dart';
 import '../pages.dart';
 
 class CompletedTasksPage extends StatefulWidget {
@@ -27,22 +28,32 @@ class __CompletedTasksState extends State<CompletedTasksPage> {
     final completedTasksProvider = Provider.of<CompletedTasksProvider>(context)..setContext(context);
 
     isExpandedList = isExpandedList.isEmpty 
-      ? completedTasksProvider.doneTasks == null ? [] : List.filled(completedTasksProvider.doneTasks!.length, false)
+      ? completedTasksProvider.copyList == null ? [] : List.filled(completedTasksProvider.copyList!.length, false)
       : isExpandedList;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(words.tasksDoneTitle),
         leading: IconButton(
-                icon: Icon(Platform.isAndroid
-                    ? Icons.arrow_back
-                    : Icons.arrow_back_ios, color: Colors.black,),
-                onPressed: () => Navigator.pushReplacementNamed(context, MainPage.routeName),
-              ),
-        actions: <Widget>[
-          //IconButton(icon: const Icon(Icons.check), onPressed: () => registerForm.logic.onSubmit(words))
+          icon: Icon(Platform.isAndroid
+            ? Icons.arrow_back
+            : Icons.arrow_back_ios, color: Colors.black,),
+          onPressed: () => Navigator.pushReplacementNamed(context, MainPage.routeName),
+        ),
+        actions: [
+          Builder(
+            builder: (BuildContext builderContext) {
+              return  IconButton(
+                icon: const Icon(Icons.filter_alt_outlined),
+                onPressed: () {
+                  Scaffold.of(builderContext).openEndDrawer();
+                },
+              );
+            }
+          )
         ],
       ),
+      endDrawer: CustomFilter.getDrawerFilter(context, completedTasksProvider),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: completedTasksProvider.doneTasks == null

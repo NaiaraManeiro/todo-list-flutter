@@ -63,6 +63,7 @@
     "dialogChangeLangButtonOk": "Change",
     "dialogButtonCancel": "Cancel",
     "dialogButtonAccept": "Accept",
+    "dialogButtonApply": "Apply",
     "dialogDeleteCategoryText": "Are you sure you want to delete the category?",
     "dialogWrongDateText": "The end date can't be sooner than the start day.",
     "dialogDeleteTaskText": "Are you sure you want to delete the task?",
@@ -99,5 +100,9 @@
     "tasksDoneTitle": "Doned tasks",
     "noDoneTasks": "There aren't any doned tasks.",
     "numDoneTasks": "{tasks} doned tasks",
-    "numDoneTask": "{tasks} doned task"
+    "numDoneTask": "{tasks} doned task",
+    "startDateFilter": "Start date",
+    "endDateFilter": "End date",
+    "categoriesFilter": "Categories",
+    "selectCategories": "Select Categories"
 }
