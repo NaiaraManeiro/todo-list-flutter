@@ -14,7 +14,7 @@ class CompletedTasksLogic {
     final email = await SharedPrefHelper.getString(constants.email);
     List<String>? categories;
     if (_provider.copyList != null) categories = _filterByCategories();
-    return await SQLHelper.getDoneTasks(email, categories);
+    return await SQLHelper.getDoneTasks(email, categories, _provider.startDate, _provider.endDate);
   }
 
   List<String>? _filterByCategories() {

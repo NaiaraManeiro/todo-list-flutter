@@ -11,6 +11,8 @@ class CompletedTasksProvider extends ChangeNotifier {
   List<CardItem>? doneTasks; 
   List<CardItem>? copyList; 
   List<bool>? selectedCategories; 
+  DateTime? startDate;
+  DateTime? endDate;
 
   CompletedTasksProvider() {
     logic = CompletedTasksLogic(this);

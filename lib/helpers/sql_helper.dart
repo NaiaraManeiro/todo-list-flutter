@@ -380,7 +380,7 @@ class SQLHelper {
   }
 
   //Get done tasks
-  static Future<List<CardItem>?> getDoneTasks(String email, List<String>? categories) async {
+  static Future<List<CardItem>?> getDoneTasks(String email, List<String>? categories, DateTime? startDate, DateTime? endDate) async {
     final db = await SQLHelper.db();
 
     String query = '''
@@ -395,6 +395,16 @@ class SQLHelper {
     if (categories != null) {
       query += ' AND c.name IN (${categories.map((_) => '?').join(', ')})';
       queryParams.addAll(categories);
+    }
+
+    if (startDate != null) {
+      query += ' AND n.dateIni >= ?';
+      queryParams.add('${startDate.day.toString().padLeft(2, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.year}');
+    }
+
+    if (endDate != null) {
+      query += ' AND n.dateFin <= ?';
+      queryParams.add('${endDate.day.toString().padLeft(2, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.year}');
     }
 
     query += ' GROUP BY c.emailU, c.name';

@@ -104,5 +104,6 @@
     "startDateFilter": "Start date",
     "endDateFilter": "End date",
     "categoriesFilter": "Categories",
-    "selectCategories": "Select Categories"
+    "selectCategories": "Select Categories",
+    "clearFilter": "Clear Filter"
 }
