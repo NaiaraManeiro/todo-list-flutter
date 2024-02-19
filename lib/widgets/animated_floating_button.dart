@@ -34,7 +34,6 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
   Widget build(BuildContext context) {
     AppLocalizations words = AppLocalizations.of(context)!;
     final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
-    final settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
     
     return GestureDetector(
       onTap: () {

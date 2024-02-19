@@ -324,32 +324,27 @@ class SQLHelper {
   }
 
   //Update task progress
-  static Future<void> updateTaskProgress(int id, String email, String nameCategory, int progress) async {
+  static Future<void> updateTasksProgress(String email, String nameCategory, List<TaskModel> tasks) async {
     final db = await SQLHelper.db();
 
-    Map<String, dynamic> values = {
-      "progress": progress,
-    };
+    for (TaskModel task in tasks) {
+      Map<String, dynamic> values = {
+        "progress": task.progress,
+      };
 
-    await db.update('notesU', values, where: "id = ? AND emailU = ? AND category = ?", whereArgs: [id, email, nameCategory]);
+      await db.update('notesU', values, where: "id = ? AND emailU = ? AND category = ?", whereArgs: [task.id, email, nameCategory]);
+    }  
   }
 
   //Update category progress
-  static Future<int> updateCategoryProgress(String email, String nameCategory) async {
+  static Future<void> updateCategoryProgress(String email, String nameCategory, int totalProgress) async {
     final db = await SQLHelper.db();
 
-    var result = await db.rawQuery('SELECT AVG(progress) AS averageProgress FROM notesU WHERE emailU = ? AND category = ?', [email, nameCategory]);
-    var averageProgressDouble = result[0]['averageProgress'] as double? ?? 0.0;
-    var averageProgress = averageProgressDouble.round();
-
-
     Map<String, dynamic> values = {
-      "totalProgress": averageProgress,
+      "totalProgress": totalProgress,
     };
 
     await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
-
-    return averageProgress;
   }
 
   //Get settings values

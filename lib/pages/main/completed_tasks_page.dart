@@ -57,13 +57,16 @@ class __CompletedTasksState extends State<CompletedTasksPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: completedTasksProvider.doneTasks == null
-          ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(words.noDoneTasks),
-                const SizedBox(height: 80,),
-                const Icon(Icons.event_busy_outlined, size: 100,)
-               ]
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(words.noDoneTasks),
+                    const SizedBox(height: 80,),
+                    const Icon(Icons.event_busy_outlined, size: 100,)
+                  ]
+                )
               )
           : Column(
               children: [ 

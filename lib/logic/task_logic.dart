@@ -15,14 +15,15 @@ class TaskLogic {
     return SQLHelper.getTasksCategory(email, nameCategory);
   }
 
-  void updateProgress(int id, String nameCategory, int progress, MainPageProvider mainProvider) async {
+  Future<void> updateProgress(String nameCategory, MainPageProvider mainProvider) async {
     final email = await SharedPrefHelper.getString(constants.email);
 
-    await SQLHelper.updateTaskProgress(id, email, nameCategory, progress);
-    _provider.refresh();
+    await SQLHelper.updateTasksProgress(email, nameCategory, _provider.tasks);
 
-    int value = await SQLHelper.updateCategoryProgress(email, nameCategory);
-    mainProvider.selectedCategory.totalProgress = value;
-    mainProvider.refresh();
+    await SQLHelper.updateCategoryProgress(email, nameCategory, mainProvider.selectedCategory!.totalProgress);
+  }
+
+  int totalProgress() {
+    return _provider.tasks.map((task) => task.progress).reduce((a, b) => a + b) ~/ _provider.tasks.length;
   }
 }

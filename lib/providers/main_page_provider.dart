@@ -8,7 +8,7 @@ class MainPageProvider extends ChangeNotifier {
   late BuildContext context;
   List<CardItem>? userCategories = [];
   List<CardItem>? categories = [];
-  late CardItem selectedCategory;
+  CardItem? selectedCategory;
   String? logUser;
 
   MainPageProvider(){

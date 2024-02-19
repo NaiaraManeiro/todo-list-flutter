@@ -15,7 +15,10 @@ class TaskProvider extends ChangeNotifier {
 
   void setContext(BuildContext context, String nameCategory) async {
     this.context = context;
-    tasks = await logic.getTasks(nameCategory);
+    if (tasks.isEmpty) {
+      tasks = await logic.getTasks(nameCategory);
+      refresh();
+    }
   }
 
   void refresh() {
