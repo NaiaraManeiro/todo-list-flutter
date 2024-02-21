@@ -42,7 +42,11 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
                     ? Icons.arrow_back
                     : Icons.arrow_back_ios, color: mainProvider.selectedCategory!.color,),
                 onPressed: () {
-                  if (!isLoading) Navigator.pushReplacementNamed(context, MainPage.routeName);
+                  if (!isLoading) {
+                    taskProvider.tasks = [];
+                    isExpandedList = []; 
+                    Navigator.pushReplacementNamed(context, MainPage.routeName);
+                  } 
                 } 
               ),
         actions: <Widget>[
@@ -143,7 +147,7 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
               ]
             )
           ),
-          if (isLoading) const CircularProgressIndicator(color: Colors.black, strokeWidth: 3)
+          if (isLoading || taskProvider.tasks.isEmpty) const CircularProgressIndicator(color: Colors.black, strokeWidth: 3)
         ]
       ) 
     );

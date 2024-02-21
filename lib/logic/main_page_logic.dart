@@ -42,7 +42,7 @@ class MainPageLogic {
 
   void deleteCategory(String nameCategory, SettingsProvider settingsProvider) async {
     AppLocalizations words = AppLocalizations.of(_provider.context)!;
-    if (settingsProvider.currentMinValue == await getCategoryMinValue()) {
+    if (settingsProvider.currentMinValue == _provider.categoryMinValue) {
       ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.minCategoryText, words.settings, _provider.context, 
         () => Navigator.pushReplacementNamed(_provider.context, SettingsPage.routeName)
       );
@@ -76,13 +76,13 @@ class MainPageLogic {
 
   void editCategories(CardItem item) async {
     final email = await SharedPrefHelper.getString(constants.email);
-    SQLHelper.getTasksCategory(email, item.nameCategory).then((tasks) => 
-      Navigator.pushReplacementNamed(_provider.context, NewTaskPage.routeName, 
-        arguments: {
-          'item' : item,
-          'tasks': tasks
-        }
-      )
+    await SQLHelper.getTasksCategory(email, item.nameCategory);
+    List<TaskModel> tasks = await SQLHelper.getTasksCategory(email, item.nameCategory);
+    Navigator.pushReplacementNamed(_provider.context, NewTaskPage.routeName, 
+      arguments: {
+        'item' : item,
+        'tasks': tasks
+      }
     );
   }
 

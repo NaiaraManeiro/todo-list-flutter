@@ -23,14 +23,15 @@ class CompletedTasksLogic {
   }
 
   List<CardItem> _filterCardItems(List<CardItem> allCardItems, List<bool> selectedCategories) {
-    List<CardItem> filteredItems = [];
+    return List.generate(allCardItems.length, (i) => allCardItems[i])
+      .where((item) => selectedCategories[allCardItems.indexOf(item)])
+      .toList();
+  }
 
-    for (int i = 0; i < allCardItems.length; i++) {
-      if (selectedCategories[i]) {
-        filteredItems.add(allCardItems[i]);
-      }
-    }
-
-    return filteredItems;
+  void limpiarFiltro() {
+    _provider.selectedCategories = List.filled(_provider.copyList!.length, true);
+    _provider.startDate = null;
+    _provider.endDate = null;
+    _provider.refresh();
   }
 }

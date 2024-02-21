@@ -8,15 +8,17 @@ class TaskProvider extends ChangeNotifier {
   late BuildContext context;
 
   List<TaskModel> tasks = [];
+  String nameCategory = "";
 
   TaskProvider(){
     logic = TaskLogic(this);
   }
 
-  void setContext(BuildContext context, String nameCategory) async {
+  void setContext(BuildContext context, String nameCategoryN) async {
     this.context = context;
-    if (tasks.isEmpty) {
-      tasks = await logic.getTasks(nameCategory);
+    if (tasks.isEmpty || nameCategory != nameCategoryN) {
+      nameCategory = nameCategoryN;
+      tasks = await logic.getTasks(nameCategoryN);
       refresh();
     }
   }

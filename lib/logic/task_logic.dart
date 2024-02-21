@@ -18,9 +18,7 @@ class TaskLogic {
   Future<void> updateProgress(String nameCategory, MainPageProvider mainProvider) async {
     final email = await SharedPrefHelper.getString(constants.email);
 
-    await SQLHelper.updateTasksProgress(email, nameCategory, _provider.tasks);
-
-    await SQLHelper.updateCategoryProgress(email, nameCategory, mainProvider.selectedCategory!.totalProgress);
+    await SQLHelper.updateProgress(email, nameCategory, _provider.tasks, mainProvider.selectedCategory!.totalProgress);
   }
 
   int totalProgress() {

@@ -79,18 +79,17 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
                     ),
                     child: IconButton(
                       onPressed: () async {
-                        int categoryMaxValue = await mainProvider.logic.getCategoryMaxValue();
-                        if (mainProvider.categories!.length == categoryMaxValue) {
+                        if (mainProvider.categories!.length == mainProvider.categoryMaxValue) {
                           ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.maxCategoryText, words.settings, context, 
                             () => Navigator.pushReplacementNamed(context, SettingsPage.routeName)
                           );
                         } else {
                           Navigator.pushReplacementNamed(context, NewCategoryPage.routeName, 
-                          arguments: {
-                            'tasks': [],
-                            'item': null
-                          }
-                        );
+                            arguments: {
+                              'tasks': [],
+                              'item': null
+                            }
+                          );
                         }
                         
                       },

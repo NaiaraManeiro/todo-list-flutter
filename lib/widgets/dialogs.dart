@@ -142,7 +142,6 @@ class ShowDialogs {
                         setState(() {
                           completedTasksProvider.selectedCategories![index] = value ?? false;
                         });
-                        completedTasksProvider.refresh();
                       },
                     );
                   }
@@ -151,13 +150,6 @@ class ShowDialogs {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () async {
-                completedTasksProvider.refresh();
-                Navigator.pop(context);
-              },
-              child: Text(words.dialogButtonApply),
-            ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);

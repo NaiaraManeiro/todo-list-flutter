@@ -10,6 +10,8 @@ class MainPageProvider extends ChangeNotifier {
   List<CardItem>? categories = [];
   CardItem? selectedCategory;
   String? logUser;
+  int? categoryMaxValue;
+  int? categoryMinValue;
 
   MainPageProvider(){
     logic = MainPageLogic(this);
@@ -21,6 +23,8 @@ class MainPageProvider extends ChangeNotifier {
     userCategories = await logic.getUserCategories(context);
     categories = await logic.getCategories();
     logUser = await logic.getUserName();
+    categoryMaxValue = await logic.getCategoryMaxValue();
+    categoryMinValue = await logic.getCategoryMinValue();
     
     refresh();
   }

@@ -104,24 +104,22 @@ class SQLHelper {
   static Future<UserModel?> checkUserExists(String email) async {
     final db = await SQLHelper.db();
     List<Map<String, dynamic>> users = await db.query('users', where: "email = ?", whereArgs: [email], limit: 1);
-    if(users.isNotEmpty) {
-      return UserModel(
-        email: users[0]["email"], 
-        username: users[0]["username"], 
-        password: users[0]["password"]
-      );
-    }
-    return null;
+    return users.isNotEmpty
+      ? UserModel(
+          email: users[0]["email"],
+          username: users[0]["username"],
+          password: users[0]["password"],
+        )
+      : null;
   }
 
   //Get the name of the user
   static Future<String> getUserName(String email) async {
     final db = await SQLHelper.db();
     List<Map<String, dynamic>> user = await db.query('users', where: "email = ?", whereArgs: [email], limit: 1);
-    if(user.isNotEmpty) {
-      return user[0]["username"];
-    }
-    return "";
+    return user.isNotEmpty
+      ? user[0]["username"]
+      : "";
   }
 
   static Future<int> changePass(String email, String newPass) async {
@@ -213,15 +211,21 @@ class SQLHelper {
   //Get categories
   static Future<List<CardItem>?> getCategories(String email) async {
     final db = await SQLHelper.db();
-    List<CardItem> categories = [];
     List<Map<String, dynamic>> categoriesU = await db.query('categoriesU', where: "emailU = ?", whereArgs: [email]);
 
     if(categoriesU.isNotEmpty) {
-      for (Map<String, dynamic> category in categoriesU) {
-        categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-          category['name'], "0", category['totalProgress'], category['totalTime'], []));
-      }
-      return categories;
+      return List.generate(categoriesU.length, (index) {
+        var category = categoriesU[index];
+        return CardItem(
+          IconDataHelper.getIconData(category['icon']),
+          MaterialColorHelper.getMaterialColor(category['iconColor']),
+          category['name'],
+          "0",
+          category['totalProgress'],
+          category['totalTime'],
+          [],
+        );
+      });
     }
     return null;
   }
@@ -251,6 +255,7 @@ class SQLHelper {
     final db = await SQLHelper.db();
 
     await db.transaction((txn) async {
+      var batch = txn.batch();
 
       Map<String, dynamic> values = {
         "name": category.nameCategory,
@@ -258,13 +263,15 @@ class SQLHelper {
         "iconColor": category.color.value
       };
 
-      await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+      batch.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
 
       Map<String, dynamic> valuesN = {
         "category": category.nameCategory,
       };
 
-      await txn.update('notesU', valuesN, where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+      batch.update('notesU', valuesN, where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+
+      await batch.commit();
     });
   }
 
@@ -273,18 +280,22 @@ class SQLHelper {
     final db = await SQLHelper.db();
 
     await db.transaction((txn) async {
+      var batch = txn.batch();
+
       if (delete == "tasks") {
         Map<String, dynamic> values = {
           "isNew": true,
         };
 
-        await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+        batch.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
       } else {
-        await txn.delete('categoriesU', where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+        batch.delete('categoriesU', where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
       }
 
       //Detelete the task related to the category
-      await txn.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+      batch.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+
+      await batch.commit();
     });
   }
 
@@ -312,39 +323,39 @@ class SQLHelper {
   static Future<List<TaskModel>> getTasksCategory(String email, String nameCategory) async {
     final db = await SQLHelper.db();
 
-    List<TaskModel> tasks = [];
+    return await db.transaction((txn) async {
+      List<Map<String, dynamic>> tasksC = await txn.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
 
-    List<Map<String, dynamic>> tasksC = await db.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
-
-    for (Map<String, dynamic> tc in tasksC) {
-      tasks.add(TaskModel(id: tc['id'], name: tc['name'], dateIni: tc['dateIni'], dateFin: tc['dateFin'], progress: tc['progress']));
-    }
-
-    return tasks;
+      return List.generate(tasksC.length, (index) {
+        var tc = tasksC[index];
+        return TaskModel(id: tc['id'], name: tc['name'], dateIni: tc['dateIni'], dateFin: tc['dateFin'], progress: tc['progress']);
+      });
+    });
   }
 
-  //Update task progress
-  static Future<void> updateTasksProgress(String email, String nameCategory, List<TaskModel> tasks) async {
+  //Update task and category progress
+  static Future<void> updateProgress(String email, String nameCategory, List<TaskModel> tasks, int totalProgress) async {
     final db = await SQLHelper.db();
 
-    for (TaskModel task in tasks) {
+    await db.transaction((txn) async {
+      var batch = txn.batch();
+
+      for (TaskModel task in tasks) {
+        Map<String, dynamic> values = {
+          "progress": task.progress,
+        };
+
+        batch.update('notesU', values, where: "id = ? AND emailU = ? AND category = ?", whereArgs: [task.id, email, nameCategory]);
+      }  
+
       Map<String, dynamic> values = {
-        "progress": task.progress,
+        "totalProgress": totalProgress,
       };
 
-      await db.update('notesU', values, where: "id = ? AND emailU = ? AND category = ?", whereArgs: [task.id, email, nameCategory]);
-    }  
-  }
+      batch.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
 
-  //Update category progress
-  static Future<void> updateCategoryProgress(String email, String nameCategory, int totalProgress) async {
-    final db = await SQLHelper.db();
-
-    Map<String, dynamic> values = {
-      "totalProgress": totalProgress,
-    };
-
-    await db.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+      await batch.commit();
+    });
   }
 
   //Get settings values
@@ -381,14 +392,14 @@ class SQLHelper {
     String query = '''
       SELECT c.name, c.icon, c.iconColor, GROUP_CONCAT(n.name) AS noteNames, GROUP_CONCAT(n.dateIni) AS noteDateIni, GROUP_CONCAT(n.dateFin) AS noteDateFin
       FROM categoriesU as c
-      LEFT JOIN notesU as n ON c.emailU = n.emailU AND c.name = n.category
+      JOIN notesU as n ON c.emailU = n.emailU AND c.name = n.category
       WHERE c.emailU = ? AND n.progress = 100
     ''';
 
     List<dynamic> queryParams = [email];
 
     if (categories != null) {
-      query += ' AND c.name IN (${categories.map((_) => '?').join(', ')})';
+      query += ' AND c.name IN (${List.filled(categories.length, '?').join(', ')})';
       queryParams.addAll(categories);
     }
 
@@ -406,22 +417,18 @@ class SQLHelper {
 
     final List<Map<String, dynamic>> result = await db.rawQuery(query, queryParams);
 
-    if (result.isEmpty) {
-      return null;
-    } else {
-      final List<CardItem> cardItems = result.map((map) {
-        return CardItem(
-          IconDataHelper.getIconData(map['icon']),
-          MaterialColorHelper.getMaterialColor(map['iconColor']),
-          map['name'] as String,
-          "",
-          0,
-          "",
-          CardItem.parseTasks(map),
-        );
-      }).toList();
-
-      return cardItems;
-    }
+    return result.isEmpty
+      ? null
+      : result.map<CardItem>((map) {
+          return CardItem(
+            IconDataHelper.getIconData(map['icon']),
+            MaterialColorHelper.getMaterialColor(map['iconColor']),
+            map['name'] as String,
+            "",
+            0,
+            "",
+            CardItem.parseTasks(map),
+          );
+        }).toList();
   }
 }

@@ -38,7 +38,10 @@ class __CompletedTasksState extends State<CompletedTasksPage> {
           icon: Icon(Platform.isAndroid
             ? Icons.arrow_back
             : Icons.arrow_back_ios, color: Colors.black,),
-          onPressed: () => Navigator.pushReplacementNamed(context, MainPage.routeName),
+          onPressed: () => {
+            completedTasksProvider.logic.limpiarFiltro(),
+            Navigator.pushReplacementNamed(context, MainPage.routeName),
+          } 
         ),
         actions: [
           Builder(

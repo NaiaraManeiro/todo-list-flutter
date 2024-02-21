@@ -21,7 +21,7 @@ class CustomFilter {
         _pickDate(context, completedTasksProvider!, "end");
         break;
       case 3:
-        _limpiarFiltro(completedTasksProvider!);
+        completedTasksProvider!.logic.limpiarFiltro();
         break;
     }
   }
@@ -87,12 +87,5 @@ class CustomFilter {
       }
       completedTasksProvider.refresh();
     }
-  }
-
-  static void _limpiarFiltro(CompletedTasksProvider completedTasksProvider) {
-    completedTasksProvider.selectedCategories = List.filled(completedTasksProvider.copyList!.length, true);
-    completedTasksProvider.startDate = null;
-    completedTasksProvider.endDate = null;
-    completedTasksProvider.refresh();
   }
 }
