@@ -142,6 +142,7 @@ class ShowDialogs {
                         setState(() {
                           completedTasksProvider.selectedCategories![index] = value ?? false;
                         });
+                        completedTasksProvider.refresh();
                       },
                     );
                   }

@@ -29,7 +29,9 @@ class CompletedTasksLogic {
   }
 
   void limpiarFiltro() {
-    _provider.selectedCategories = List.filled(_provider.copyList!.length, true);
+    _provider.selectedCategories = _provider.copyList == null
+      ? []
+      : List.filled(_provider.copyList!.length, true);
     _provider.startDate = null;
     _provider.endDate = null;
     _provider.refresh();

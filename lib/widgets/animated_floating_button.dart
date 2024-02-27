@@ -21,6 +21,9 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
   late AnimationController _controller;
   bool _showCircleList = false;
 
+  bool contextSet = false;
+  late MainPageProvider mainProvider;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +36,10 @@ class _CircleListFloatingButtonState extends State<CircleListFloatingButton>
   @override
   Widget build(BuildContext context) {
     AppLocalizations words = AppLocalizations.of(context)!;
-    final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+    if (!contextSet) {
+      mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+      contextSet = true;
+    }
     
     return GestureDetector(
       onTap: () {

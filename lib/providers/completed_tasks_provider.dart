@@ -23,7 +23,10 @@ class CompletedTasksProvider extends ChangeNotifier {
 
     doneTasks = await logic.getDoneTasks();
     copyList = copyList ?? doneTasks;
-    selectedCategories = selectedCategories ?? List.filled(doneTasks!.length, true);
+    selectedCategories = selectedCategories ?? 
+      (doneTasks == null
+        ? []
+        : List.filled(doneTasks!.length, true));
     
     refresh();
   }

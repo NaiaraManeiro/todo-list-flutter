@@ -18,10 +18,18 @@ class MainPage extends StatefulWidget {
 }
 
 class __MainPageState extends State<MainPage> {
+  bool contextSet = false;
+  late MainPageProvider mainProvider;
+  late SettingsProvider settingsProvider;
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations words = AppLocalizations.of(context)!;
-    final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+    if (!contextSet) {
+      mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+      settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
+      contextSet = true;
+    }
 
     final size = MediaQuery.of(context).size;
 
@@ -51,7 +59,7 @@ class __MainPageState extends State<MainPage> {
                   Text(words.mainYesCategories),
                   const SizedBox(height: 30,),
                   CarouselSlider(
-                    items: mainProvider.logic.getCards(context),
+                    items: mainProvider.logic.getCards(context, settingsProvider),
                     options: CarouselOptions(
                       aspectRatio: 16 / 9,
                       height: min(size.width, size.height) - 110,

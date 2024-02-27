@@ -20,12 +20,12 @@ class MainPageLogic {
     return await SQLHelper.getUserCategories(context, email);
   }
 
-  List<Widget>? getCards(context) {
+  List<Widget>? getCards(context, settingsProvider) {
     if (_provider.userCategories == null) {
       return null;
     } else {
       return List.generate(_provider.userCategories!.length, (index) {
-        return CategoryCard.getCategoryCard(context, _provider.userCategories!.elementAt(index));
+        return CategoryCard.getCategoryCard(context, _provider.userCategories!.elementAt(index), _provider, settingsProvider);
       });
     }
   }
@@ -76,7 +76,6 @@ class MainPageLogic {
 
   void editCategories(CardItem item) async {
     final email = await SharedPrefHelper.getString(constants.email);
-    await SQLHelper.getTasksCategory(email, item.nameCategory);
     List<TaskModel> tasks = await SQLHelper.getTasksCategory(email, item.nameCategory);
     Navigator.pushReplacementNamed(_provider.context, NewTaskPage.routeName, 
       arguments: {

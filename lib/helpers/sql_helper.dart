@@ -42,6 +42,7 @@ class SQLHelper {
         dateIni TEXT NOT NULL,
         dateFin TEXT NOT NULL,
         progress INTEGER NOT NULL,
+        FOREIGN KEY (emailU, category) REFERENCES categoriesU(emailU, name) ON DELETE CASCADE,
         UNIQUE (id, emailU, category))""");
     await database.execute("""CREATE TABLE IF NOT EXISTS settingsU(
         emailU TEXT NOT NULL,
@@ -59,7 +60,7 @@ class SQLHelper {
         batch.delete('categoriesU');
         batch.delete('notesU');
         batch.delete('settingsU');
-        await batch.commit();
+        await batch.commit(noResult: true);
       });
     } catch(error){
       throw Exception('DbBase.cleanDatabase: $error');
@@ -70,66 +71,77 @@ class SQLHelper {
   static Future<int> insertNewUser(AppLocalizations words, String email, String username, String encryptPassword) async {
     final db = await SQLHelper.db();
 
-    final data = {'email': email, 'username': username, 'password': encryptPassword};
-    final id = await db.insert('users', data,
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    return await db.transaction<int>((txn) async {
+      final data = {'email': email, 'username': username, 'password': encryptPassword};
+      final id = await txn.insert('users', data,
+          conflictAlgorithm: sql.ConflictAlgorithm.replace);
 
-    final List<Map<String, dynamic>> dataCList = [
-      {'emailU': email, 'name': words.categoryJob, 'icon': "62677", 'iconColor': const Color(0xFFE6B0AA).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
-      {'emailU': email, 'name': words.categorySports, 'icon': "62421", 'iconColor': const Color(0xFFD7BDE2).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
-      {'emailU': email, 'name': words.categoryReading, 'icon': "61151", 'iconColor': const Color(0xFFA9CCE3).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
-      {'emailU': email, 'name': words.categoryTravel, 'icon': "61573", 'iconColor': const Color(0xFFABEBC6).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
-      {'emailU': email, 'name': words.categoryGeneral, 'icon': "61253", 'iconColor': const Color(0xFFF9E79F).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
-    ];
+      final List<Map<String, dynamic>> dataCList = [
+        {'emailU': email, 'name': words.categoryJob, 'icon': "62677", 'iconColor': const Color(0xFFE6B0AA).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+        {'emailU': email, 'name': words.categorySports, 'icon': "62421", 'iconColor': const Color(0xFFD7BDE2).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+        {'emailU': email, 'name': words.categoryReading, 'icon': "61151", 'iconColor': const Color(0xFFA9CCE3).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+        {'emailU': email, 'name': words.categoryTravel, 'icon': "61573", 'iconColor': const Color(0xFFABEBC6).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+        {'emailU': email, 'name': words.categoryGeneral, 'icon': "61253", 'iconColor': const Color(0xFFF9E79F).value, 'totalProgress': 0, 'totalTime': "0", 'isNew': true},
+      ];
 
-    for (var dataC in dataCList) {
-      await db.insert('categoriesU', dataC,
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
-    }
+      for (var dataC in dataCList) {
+        await txn.insert('categoriesU', dataC,
+          conflictAlgorithm: sql.ConflictAlgorithm.replace);
+      }
 
-    final List<Map<String, dynamic>> dataSList = [
-      {'emailU': email, 'setting': constants.categoryMax, 'value': "10"},
-      {'emailU': email, 'setting': constants.categoryMin, 'value': constants.categoryMinValue},
-    ];
+      final List<Map<String, dynamic>> dataSList = [
+        {'emailU': email, 'setting': constants.categoryMax, 'value': "10"},
+        {'emailU': email, 'setting': constants.categoryMin, 'value': constants.categoryMinValue},
+      ];
 
-    for (var dataC in dataSList) {
-      await db.insert('settingsU', dataC,
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
-    }
+      for (var dataC in dataSList) {
+        await txn.insert('settingsU', dataC,
+          conflictAlgorithm: sql.ConflictAlgorithm.replace);
+      }
 
-    return id;
+      return id;
+    });
   }
 
   //Check if user already exists
   static Future<UserModel?> checkUserExists(String email) async {
     final db = await SQLHelper.db();
-    List<Map<String, dynamic>> users = await db.query('users', where: "email = ?", whereArgs: [email], limit: 1);
-    return users.isNotEmpty
-      ? UserModel(
-          email: users[0]["email"],
-          username: users[0]["username"],
-          password: users[0]["password"],
-        )
-      : null;
+
+    return await db.transaction<UserModel?>((txn) async {
+      List<Map<String, dynamic>> users = await txn.query('users', where: "email = ?", whereArgs: [email], limit: 1);
+      return users.isNotEmpty
+        ? UserModel(
+            email: users[0]["email"],
+            username: users[0]["username"],
+            password: users[0]["password"],
+          )
+        : null;
+    });
   }
 
   //Get the name of the user
   static Future<String> getUserName(String email) async {
     final db = await SQLHelper.db();
-    List<Map<String, dynamic>> user = await db.query('users', where: "email = ?", whereArgs: [email], limit: 1);
-    return user.isNotEmpty
-      ? user[0]["username"]
-      : "";
+
+    return await db.transaction<String>((txn) async {
+      List<Map<String, dynamic>> user = await txn.query('users', where: "email = ?", whereArgs: [email], limit: 1);
+      return user.isNotEmpty
+        ? user[0]["username"]
+        : "";
+    });
   }
 
+  //Change the user pass
   static Future<int> changePass(String email, String newPass) async {
     final db = await SQLHelper.db();
 
-    Map<String, dynamic> values = {
-      "password": newPass,
-    };
+    return await db.transaction<int>((txn) async {
+      Map<String, dynamic> values = {
+        "password": newPass,
+      };
 
-    return await db.update('users', values, where: "email = ?", whereArgs: [email]);
+      return await txn.update('users', values, where: "email = ?", whereArgs: [email]);
+    });
   }
 
   //Get users categories for the carrousel
@@ -139,12 +151,94 @@ class SQLHelper {
     final db = await SQLHelper.db();
     List<CardItem> categories = [];
 
-    return await db.transaction<List<CardItem>?>( (txn) async {
-      List<Map<String, dynamic>> categoriesU = await txn.query('categoriesU', where: "emailU = ? AND isNew = ?", whereArgs: [email, false]);
+    return await db.transaction<List<CardItem>?>((txn) async {
 
+      String query = '''
+        SELECT c.*, COUNT(n.id) as numTareas, GROUP_CONCAT(n.progress) AS noteProgress, GROUP_CONCAT(n.dateIni) AS noteDateIni, GROUP_CONCAT(n.dateFin) AS noteDateFin
+        FROM categoriesU AS c
+        LEFT JOIN notesU AS n ON c.name = n.category
+        WHERE c.emailU = ? AND c.isNew = ?
+        GROUP BY c.emailU, c.name;
+      ''';
+
+      List<Map<String, dynamic>> results = await txn.rawQuery(query, [email, false]);
+
+      if (results.isNotEmpty) {
+        for (var row in results) {
+          int countTareas = row["numTareas"]; 
+          if (countTareas > 0) {
+            String tareas = countTareas == 1
+              ? "$countTareas ${words.task}"
+              : "$countTareas ${words.tasks}";
+
+            int percentage = 0;
+            DateTime earliestDate = DateTime(1890);
+            DateTime latestDate = DateTime(1890);
+
+            List<String> progresos = row["noteProgress"].split(",");
+            List<String> fechasIni = row["noteDateIni"].split(",");
+            List<String> fechasFin = row["noteDateFin"].split(",");
+
+            for (int i = 0; i < countTareas; i++) {
+              int progress = int.parse(progresos.elementAt(i));
+              percentage = percentage + progress;
+
+              List<String> ini = fechasIni.elementAt(i).split('-');    
+              DateTime dateIni = DateTime(int.parse(ini[2]), int.parse(ini[1]), int.parse(ini[0]));
+              if (dateIni.isAfter(earliestDate)) {
+                earliestDate = dateIni;
+              }
+
+              List<String> fin = fechasFin.elementAt(i).split('-');  
+              DateTime dateFin = DateTime(int.parse(fin[2]), int.parse(fin[1]), int.parse(fin[0]));
+              if (dateFin.isAfter(latestDate)) {
+                latestDate = dateFin;
+              }
+            }
+
+            Duration daysDiff = latestDate.difference(earliestDate);
+            int totalMonths = daysDiff.inDays ~/ 30; 
+            int remainingDays = daysDiff.inDays % 30;
+            String dias = ""; 
+
+            if (totalMonths == 0) {
+              dias = daysDiff.inDays == 1
+                ? "${daysDiff.inDays} ${words.day}"
+                : "${daysDiff.inDays} ${words.days}";
+            } else if (remainingDays == 0) {
+              dias = totalMonths == 1
+                ? "$totalMonths ${words.month}"
+                : "$totalMonths ${words.months}";
+            } else {
+              String months = totalMonths == 1
+                ? "$totalMonths ${words.month} "
+                : "$totalMonths ${words.months} ";
+              String days = daysDiff.inDays == 1
+                ? "${daysDiff.inDays} ${words.day}"
+                : "${daysDiff.inDays} ${words.days}";
+              dias = months + days;
+            }
+
+            categories.add(CardItem(IconDataHelper.getIconData(row['icon']), MaterialColorHelper.getMaterialColor(row['iconColor']), 
+              row['name'], tareas, percentage == 0 ? 0 : percentage~/countTareas, dias, []));
+          } else {
+            categories.add(CardItem(IconDataHelper.getIconData(row['icon']), MaterialColorHelper.getMaterialColor(row['iconColor']), 
+              row['name'], "0 ${words.tasks}", row['totalProgress'], row['totalTime'], []));
+          }
+        }
+        return categories;
+      }
+
+      return null;
+    });
+
+    /*return await db.transaction<List<CardItem>?>( (txn) async {
+      List<Map<String, dynamic>> categoriesU = await txn.query('categoriesU', where: "emailU = ? AND isNew = ?", whereArgs: [email, false]);
+    
       if(categoriesU.isNotEmpty) {
         for (Map<String, dynamic> category in categoriesU) {
           List<Map<String, dynamic>> notes = await txn.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, category['name']]);
+
           if (notes.isNotEmpty) {
             int countTareas = notes.length;
             String tareas = countTareas == 1
@@ -205,29 +299,32 @@ class SQLHelper {
         return categories;
       }
       return null;
-    });
+    });*/
   }
 
   //Get categories
   static Future<List<CardItem>?> getCategories(String email) async {
     final db = await SQLHelper.db();
-    List<Map<String, dynamic>> categoriesU = await db.query('categoriesU', where: "emailU = ?", whereArgs: [email]);
 
-    if(categoriesU.isNotEmpty) {
-      return List.generate(categoriesU.length, (index) {
-        var category = categoriesU[index];
-        return CardItem(
-          IconDataHelper.getIconData(category['icon']),
-          MaterialColorHelper.getMaterialColor(category['iconColor']),
-          category['name'],
-          "0",
-          category['totalProgress'],
-          category['totalTime'],
-          [],
-        );
-      });
-    }
-    return null;
+    return await db.transaction<List<CardItem>?>((txn) async {
+      List<Map<String, dynamic>> categoriesU = await txn.query('categoriesU', where: "emailU = ?", whereArgs: [email]);
+
+      if(categoriesU.isNotEmpty) {
+        return List.generate(categoriesU.length, (index) {
+          var category = categoriesU[index];
+          return CardItem(
+            IconDataHelper.getIconData(category['icon']),
+            MaterialColorHelper.getMaterialColor(category['iconColor']),
+            category['name'],
+            "0",
+            category['totalProgress'],
+            category['totalTime'],
+            [],
+          );
+        });
+      }
+      return null;
+    });
   }
 
   //Add category of user
@@ -271,7 +368,7 @@ class SQLHelper {
 
       batch.update('notesU', valuesN, where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
 
-      await batch.commit();
+      await batch.commit(noResult: true);
     });
   }
 
@@ -280,27 +377,23 @@ class SQLHelper {
     final db = await SQLHelper.db();
 
     await db.transaction((txn) async {
-      var batch = txn.batch();
-
       if (delete == "tasks") {
         Map<String, dynamic> values = {
           "isNew": true,
         };
 
-        batch.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+        txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+
+        //Detelete the task related to the category
+        txn.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
       } else {
-        batch.delete('categoriesU', where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+        txn.delete('categoriesU', where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
       }
-
-      //Detelete the task related to the category
-      batch.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
-
-      await batch.commit();
     });
   }
 
   //Add tasks to the user and category
-  static Future<void> addTasks(String email, String nameCategory, List<TaskModel> tasks) async {
+  static Future<void> addTasks(String email, String nameCategory, List<TaskModel> tasks, bool newC) async {
     final db = await SQLHelper.db();
 
     Map<String, dynamic> values = {
@@ -308,14 +401,19 @@ class SQLHelper {
     };
 
     await db.transaction((txn) async {
-      await txn.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+      var batch = txn.batch();
+      batch.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
+      if (!newC) batch.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
+      await batch.commit(noResult: true);
+    });
 
-      await txn.delete('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, nameCategory]);
-      
+    await db.transaction((txn) async {  
+      var batch = txn.batch();
       for (TaskModel task in tasks) {
         final data = {'emailU': email, 'category': nameCategory, 'name': task.name, 'dateIni': task.dateIni, 'dateFin': task.dateFin, 'progress': task.progress};
-        await txn.insert('notesU', data);
+        batch.insert('notesU', data);
       }
+      await batch.commit(noResult: true);
     });
   }
 
@@ -354,7 +452,7 @@ class SQLHelper {
 
       batch.update('categoriesU', values, where: "emailU = ? AND name = ?", whereArgs: [email, nameCategory]);
 
-      await batch.commit();
+      await batch.commit(noResult: true);
     });
   }
 
@@ -362,73 +460,84 @@ class SQLHelper {
   static Future<List<Map<String, dynamic>>> getSettings(String email) async {
     final db = await SQLHelper.db();
 
-    return await db.query('settingsU', where: "emailU = ?", whereArgs: [email]);
+    return await db.transaction<List<Map<String, dynamic>>>((txn) async {
+      return await txn.query('settingsU', where: "emailU = ?", whereArgs: [email]);
+    });
   }
 
   //Get value of setting
   static Future<String> getSettingValue(String email, String settingName) async {
     final db = await SQLHelper.db();
 
-    List<Map<String, dynamic>> setting = await db.query('settingsU', where: "emailU = ? AND setting = ?", whereArgs: [email, settingName], limit: 1);
-    return setting[0]["value"];
+    return await db.transaction<String>((txn) async {
+      List<Map<String, dynamic>> setting = await txn.query('settingsU', where: "emailU = ? AND setting = ?", whereArgs: [email, settingName], limit: 1);
+      return setting[0]["value"];
+    });
   }
 
   //Update settings for a user
   static Future<void> saveSettings(String email, List<Map<String, dynamic>> settings) async {
     final db = await SQLHelper.db();
 
-    for (Map<String, dynamic> setting in settings) {
-      String settingName = setting['setting'];
-      dynamic settingValue = setting['value'];
+    await db.transaction((txn) async {
+      var batch = txn.batch();
+      for (Map<String, dynamic> setting in settings) {
+        String settingName = setting['setting'];
+        dynamic settingValue = setting['value'];
 
-      await db.update('settingsU', {'value': settingValue}, where: "emailU = ? AND setting = ?", whereArgs: [email, settingName]);
-    }
+        batch.update('settingsU', {'value': settingValue}, where: "emailU = ? AND setting = ?", whereArgs: [email, settingName]);
+      }
+      await batch.commit(noResult: true);
+    });
   }
 
   //Get done tasks
   static Future<List<CardItem>?> getDoneTasks(String email, List<String>? categories, DateTime? startDate, DateTime? endDate) async {
     final db = await SQLHelper.db();
 
-    String query = '''
-      SELECT c.name, c.icon, c.iconColor, GROUP_CONCAT(n.name) AS noteNames, GROUP_CONCAT(n.dateIni) AS noteDateIni, GROUP_CONCAT(n.dateFin) AS noteDateFin
-      FROM categoriesU as c
-      JOIN notesU as n ON c.emailU = n.emailU AND c.name = n.category
-      WHERE c.emailU = ? AND n.progress = 100
-    ''';
+    return await db.transaction<List<CardItem>?>((txn) async {
 
-    List<dynamic> queryParams = [email];
+      String query = '''
+        SELECT c.name, c.icon, c.iconColor, GROUP_CONCAT(n.name) AS noteNames, GROUP_CONCAT(n.dateIni) AS noteDateIni, GROUP_CONCAT(n.dateFin) AS noteDateFin
+        FROM categoriesU as c
+        JOIN notesU as n ON c.emailU = n.emailU AND c.name = n.category
+        WHERE c.emailU = ? AND n.progress = 100
+      ''';
 
-    if (categories != null) {
-      query += ' AND c.name IN (${List.filled(categories.length, '?').join(', ')})';
-      queryParams.addAll(categories);
-    }
+      List<dynamic> queryParams = [email];
 
-    if (startDate != null) {
-      query += ' AND n.dateIni >= ?';
-      queryParams.add('${startDate.day.toString().padLeft(2, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.year}');
-    }
+      if (categories != null) {
+        query += ' AND c.name IN (${List.filled(categories.length, '?').join(', ')})';
+        queryParams.addAll(categories);
+      }
 
-    if (endDate != null) {
-      query += ' AND n.dateFin <= ?';
-      queryParams.add('${endDate.day.toString().padLeft(2, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.year}');
-    }
+      if (startDate != null) {
+        query += ' AND n.dateIni >= ?';
+        queryParams.add('${startDate.day.toString().padLeft(2, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.year}');
+      }
 
-    query += ' GROUP BY c.emailU, c.name';
+      if (endDate != null) {
+        query += ' AND n.dateFin <= ?';
+        queryParams.add('${endDate.day.toString().padLeft(2, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.year}');
+      }
 
-    final List<Map<String, dynamic>> result = await db.rawQuery(query, queryParams);
+      query += ' GROUP BY c.emailU, c.name';
 
-    return result.isEmpty
-      ? null
-      : result.map<CardItem>((map) {
-          return CardItem(
-            IconDataHelper.getIconData(map['icon']),
-            MaterialColorHelper.getMaterialColor(map['iconColor']),
-            map['name'] as String,
-            "",
-            0,
-            "",
-            CardItem.parseTasks(map),
-          );
-        }).toList();
+      final List<Map<String, dynamic>> result = await txn.rawQuery(query, queryParams);
+
+      return result.isEmpty
+        ? null
+        : result.map<CardItem>((map) {
+            return CardItem(
+              IconDataHelper.getIconData(map['icon']),
+              MaterialColorHelper.getMaterialColor(map['iconColor']),
+              map['name'] as String,
+              "",
+              0,
+              "",
+              CardItem.parseTasks(map),
+            );
+          }).toList();
+    });
   }
 }

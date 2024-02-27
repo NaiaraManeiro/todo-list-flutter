@@ -54,6 +54,7 @@
     "startDate": "start date",
     "endDate": "end date",
     "newTask": "Add a new task",
+    "categorySaved": "Data saved!",
 
     "dialogAlertTitle": "Alert!",
     "dialogRegisterFailText": "There was a problem in the register, try again.",

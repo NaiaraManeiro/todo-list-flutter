@@ -20,11 +20,21 @@ class MainPageProvider extends ChangeNotifier {
   void setContext(BuildContext context) async {
     this.context = context;
 
-    userCategories = await logic.getUserCategories(context);
-    categories = await logic.getCategories();
-    logUser = await logic.getUserName();
-    categoryMaxValue = await logic.getCategoryMaxValue();
-    categoryMinValue = await logic.getCategoryMinValue();
+    List<Future> tasks = [
+      logic.getUserCategories(context),
+      logic.getCategories(),
+      logic.getUserName(),
+      logic.getCategoryMaxValue(),
+      logic.getCategoryMinValue(),
+    ];
+
+    List results = await Future.wait(tasks);
+
+    userCategories = results[0];
+    categories = results[1];
+    logUser = results[2];
+    categoryMaxValue = results[3];
+    categoryMinValue = results[4];
     
     refresh();
   }

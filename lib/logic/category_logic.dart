@@ -27,13 +27,11 @@ class CategoryLogic {
     }
   }
 
-  void saveTasks(String nameCategory) async {
+  Future<void> saveTasks(String nameCategory, bool newC) async {
     final email = await SharedPrefHelper.getString(constants.email);
-    SQLHelper.addTasks(email, nameCategory, _provider.newTaskList)
-      .then((value) => {
-        _provider.logic.clean(),
-        Navigator.pushReplacementNamed(_provider.context, MainPage.routeName),
-      }); 
+    await SQLHelper.addTasks(email, nameCategory, _provider.newTaskList, newC);
+    _provider.logic.clean();
+    Navigator.pushReplacementNamed(_provider.context, MainPage.routeName); 
   }
 
   void addNewTask(int index) {

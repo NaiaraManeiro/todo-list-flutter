@@ -7,8 +7,8 @@ class SettingsProvider extends ChangeNotifier {
   late SettingsLogic logic;
   late BuildContext context;
 
-  int? currentMaxValue;
-  int? currentMinValue;
+  late int currentMaxValue;
+  late int currentMinValue;
 
   SettingsProvider(){
     logic = SettingsLogic(this);

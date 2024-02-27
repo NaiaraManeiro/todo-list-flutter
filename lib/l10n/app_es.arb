@@ -54,6 +54,7 @@
     "startDate": "fecha inicio",
     "endDate": "fecha fin",
     "newTask": "Añade una nueva tarea",
+    "categorySaved": "¡Información guardada!",
 
     "dialogAlertTitle": "¡Alerta!",
     "dialogRegisterFailText": "Hubo in problema con el registro, intentelo de nuevo.",

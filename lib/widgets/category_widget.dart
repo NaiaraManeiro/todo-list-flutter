@@ -8,10 +8,7 @@ import 'widgets.dart';
 
 class CategoryWidget {
 
-  static Widget getCategoryWidget(BuildContext context, CardItem item, bool show) {
-    final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
-    final settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
-
+  static Widget getCategoryWidget(BuildContext context, CardItem item, bool show, MainPageProvider mainProvider, SettingsProvider settingsProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

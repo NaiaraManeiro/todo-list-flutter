@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
@@ -21,15 +22,27 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
   List<bool> isExpandedList = [];
   bool isLoading = false;
 
+  bool contextSet = false;
+  late MainPageProvider mainProvider;
+  late SettingsProvider settingsProvider;
+  late TaskProvider taskProvider;
+
   @override
   Widget build(BuildContext context) {
-    final settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
-    final mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+    AppLocalizations words = AppLocalizations.of(context)!;
+
+    if (!contextSet) {
+      settingsProvider = Provider.of<SettingsProvider>(context)..setContext(context);
+      mainProvider = Provider.of<MainPageProvider>(context)..setContext(context);
+    }
 
     final Map<String, dynamic>? arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     mainProvider.selectedCategory = arguments?['item'];
 
-    final taskProvider = Provider.of<TaskProvider>(context)..setContext(context, mainProvider.selectedCategory!.nameCategory);
+    if (!contextSet) {
+      taskProvider = Provider.of<TaskProvider>(context)..setContext(context, mainProvider.selectedCategory!.nameCategory);
+      contextSet = true;
+    }
 
     isExpandedList = isExpandedList.isEmpty 
       ? List.filled(taskProvider.tasks.length, false)
@@ -57,6 +70,7 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
                 isLoading = true;
               });
               await taskProvider.logic.updateProgress(mainProvider.selectedCategory!.nameCategory, mainProvider);
+              ShowDialogs.showSnackbar(context, words.categorySaved); 
               setState(() {
                 isLoading = false;
               });
@@ -76,7 +90,7 @@ class _InfoCategoryPageState extends State<InfoCategoryPage> {
             padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 30.0, bottom: 30.0),
             child: Column(
               children: [
-                CategoryWidget.getCategoryWidget(context, mainProvider.selectedCategory!, false),
+                CategoryWidget.getCategoryWidget(context, mainProvider.selectedCategory!, false, mainProvider, settingsProvider),
                 const SizedBox(height: 30,),
                 Expanded(
                   child: ListView(
