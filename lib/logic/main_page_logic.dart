@@ -42,7 +42,7 @@ class MainPageLogic {
 
   void deleteCategory(String nameCategory, SettingsProvider settingsProvider) async {
     AppLocalizations words = AppLocalizations.of(_provider.context)!;
-    if (settingsProvider.currentMinValue == _provider.categoryMinValue) {
+    if (settingsProvider.currentMinValue == _provider.categories!.length) {
       ShowDialogs.showButtonDialog(words.dialogAlertTitle, words.minCategoryText, words.settings, _provider.context, 
         () => Navigator.pushReplacementNamed(_provider.context, SettingsPage.routeName)
       );

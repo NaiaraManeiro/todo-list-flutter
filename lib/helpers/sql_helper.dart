@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -231,75 +232,6 @@ class SQLHelper {
 
       return null;
     });
-
-    /*return await db.transaction<List<CardItem>?>( (txn) async {
-      List<Map<String, dynamic>> categoriesU = await txn.query('categoriesU', where: "emailU = ? AND isNew = ?", whereArgs: [email, false]);
-    
-      if(categoriesU.isNotEmpty) {
-        for (Map<String, dynamic> category in categoriesU) {
-          List<Map<String, dynamic>> notes = await txn.query('notesU', where: "emailU = ? AND category = ?", whereArgs: [email, category['name']]);
-
-          if (notes.isNotEmpty) {
-            int countTareas = notes.length;
-            String tareas = countTareas == 1
-            ? "$countTareas ${words.task}"
-            : "$countTareas ${words.tasks}";
-
-            int percentage = 0;
-            DateTime earliestDate = DateTime(1890);
-            DateTime latestDate = DateTime(1890);
-
-            for (Map<String, dynamic> note in notes) {
-              int progress = note["progress"];
-              percentage = percentage + progress;
-
-              List<String> ini = note['dateIni'].split('-');    
-              DateTime dateIni = DateTime(int.parse(ini[2]), int.parse(ini[1]), int.parse(ini[0]));
-              if (dateIni.isAfter(earliestDate)) {
-                earliestDate = dateIni;
-              }
-
-              List<String> fin = note['dateFin'].split('-');  
-              DateTime dateFin = DateTime(int.parse(fin[2]), int.parse(fin[1]), int.parse(fin[0]));
-              if (dateFin.isAfter(latestDate)) {
-                latestDate = dateFin;
-              }
-            }
-
-            Duration daysDiff = latestDate.difference(earliestDate);
-            int totalMonths = daysDiff.inDays ~/ 30; 
-            int remainingDays = daysDiff.inDays % 30;
-            String dias = ""; 
-
-            if (totalMonths == 0) {
-              dias = daysDiff.inDays == 1
-                ? "${daysDiff.inDays} ${words.day}"
-                : "${daysDiff.inDays} ${words.days}";
-            } else if (remainingDays == 0) {
-              dias = totalMonths == 1
-                ? "$totalMonths ${words.month}"
-                : "$totalMonths ${words.months}";
-            } else {
-              String months = totalMonths == 1
-                ? "$totalMonths ${words.month} "
-                : "$totalMonths ${words.months} ";
-              String days = daysDiff.inDays == 1
-                ? "${daysDiff.inDays} ${words.day}"
-                : "${daysDiff.inDays} ${words.days}";
-              dias = months + days;
-            }
-
-            categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-              category['name'], tareas, percentage == 0 ? 0 : percentage~/countTareas, dias, []));
-          } else {
-            categories.add(CardItem(IconDataHelper.getIconData(category['icon']), MaterialColorHelper.getMaterialColor(category['iconColor']), 
-              category['name'], "0 ${words.tasks}", category['totalProgress'], category['totalTime'], []));
-          }
-        }
-        return categories;
-      }
-      return null;
-    });*/
   }
 
   //Get categories
@@ -513,12 +445,12 @@ class SQLHelper {
 
       if (startDate != null) {
         query += ' AND n.dateIni >= ?';
-        queryParams.add('${startDate.day.toString().padLeft(2, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.year}');
+        queryParams.add(DateFormat('dd-MM-yyyy').format(startDate).toString());
       }
 
       if (endDate != null) {
         query += ' AND n.dateFin <= ?';
-        queryParams.add('${endDate.day.toString().padLeft(2, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.year}');
+        queryParams.add(DateFormat('dd-MM-yyyy').format(endDate).toString());
       }
 
       query += ' GROUP BY c.emailU, c.name';
